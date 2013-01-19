@@ -1,19 +1,22 @@
 package com.brick.panel;
 
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import javax.swing.JLabel;
-import java.awt.Font;
 import java.awt.Color;
-import java.awt.GridBagLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import com.brick.database.DatabaseHelper;
 import com.brick.helper.ComboBoxItemEditor;
@@ -26,11 +29,16 @@ public class LabourAdvance extends JPanel {
 	private final JLabel lblAdvance = new JLabel("Advance");
 	private final JLabel lblLabourName = new JLabel("Labour Name");
 	private final JLabel lblAmount = new JLabel("Amount");
+	private final JLabel lblDate = new JLabel("Date");
 	private final JTextField textField = new JTextField();
+	private final JTextField datefield = new JTextField();
 	private final JComboBox<LaborHelper> labourname = new JComboBox<LaborHelper>();
 	private final JButton btnSubmit = new JButton("Submit");
 	DatabaseHelper databasehelper = new DatabaseHelper();
 	private DefaultComboBoxModel model;
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	Date date = new Date();
+	String currentDate = dateFormat.format(date);
 
 	/**
 	 * Create the panel.
@@ -48,7 +56,7 @@ public class LabourAdvance extends JPanel {
 		add(panel, BorderLayout.CENTER);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{160, 240};
-		gbl_panel.rowHeights = new int[]{45, 45, 80};
+		gbl_panel.rowHeights = new int[]{45, 45,45, 80};
 		//gbl_panel.columnWidths = new int[]{0, 0, 0};
 		//gbl_panel.rowHeights = new int[]{0, 0, 0, 0};
 		gbl_panel.columnWeights = new double[]{0.0, 0.0};
@@ -79,6 +87,14 @@ public class LabourAdvance extends JPanel {
 		lblAmount.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(lblAmount, gbc_lblAmount);
 		
+		GridBagConstraints gbc_lblDate = new GridBagConstraints();
+		gbc_lblDate.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDate.anchor = GridBagConstraints.WEST;
+		gbc_lblDate.gridx = 0;
+		gbc_lblDate.gridy = 2;
+		lblDate.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel.add(lblDate, gbc_lblDate);
+		
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.insets = new Insets(7, 0, 7, 0);
 		gbc_textField.fill = GridBagConstraints.BOTH;
@@ -86,11 +102,18 @@ public class LabourAdvance extends JPanel {
 		gbc_textField.gridy = 1;
 		panel.add(textField, gbc_textField);
 		
+		GridBagConstraints gbc_textFielddate = new GridBagConstraints();
+		gbc_textFielddate.insets = new Insets(7, 0, 7, 0);
+		gbc_textFielddate.fill = GridBagConstraints.BOTH;
+		gbc_textFielddate.gridx = 1;
+		gbc_textFielddate.gridy = 2;
+		panel.add(datefield, gbc_textFielddate);
+		
 		GridBagConstraints gbc_btnSubmit = new GridBagConstraints();
 		gbc_btnSubmit.gridwidth = 2;
 		gbc_btnSubmit.insets = new Insets(0, 0, 0, 5);
 		gbc_btnSubmit.gridx = 0;
-		gbc_btnSubmit.gridy = 2;
+		gbc_btnSubmit.gridy = 3;
 		btnSubmit.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(btnSubmit, gbc_btnSubmit);
 		panel_1.setBackground(Color.GRAY);
