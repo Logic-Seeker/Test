@@ -160,7 +160,7 @@ public class DatabaseHelper {
 	
 	public ResultSet fetchEmployee() {
 		ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
-		String query = "SELECT * From employee";
+		String query = "SELECT * From employee where Remove='Delete'";
 		System.out.println("check");
 		try {
 			pst = connection.prepareStatement(query);
@@ -380,6 +380,110 @@ System.err.println("DatabaseHelper 227");
 
 	}
 
+	public Object insertlaboradvance(int l_id,String amount, Date date) {
+		int realAmount = Integer.valueOf(amount);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String currentDate = dateFormat.format(date);
+
+		String query = "insert into LaborAdvance(l_id,amount,date) values('"
+				+ l_id
+				+ "','"
+				+ realAmount
+				+ "','"
+				+ currentDate
+				+ "');";
+		Statement stmt = null;
+		String errorMessage = "";
+		int result = -1;
+		try {
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+			e.printStackTrace();
+		}
+		return new Object[] { result,errorMessage };
+
+	}
+
+	public Object insertleaderadvance(int le_id,String amount, Date date) {
+		int realAmount = Integer.valueOf(amount);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String currentDate = dateFormat.format(date);
+
+		String query = "insert into LeaderAdvance(le_id,amount,date) values('"
+				+ le_id
+				+ "','"
+				+ realAmount
+				+ "','"
+				+ currentDate
+				+ "');";
+		Statement stmt = null;
+		String errorMessage = "";
+		int result = -1;
+		try {
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+			e.printStackTrace();
+		}
+		return new Object[] { result,errorMessage };
+
+	}
+
+	public Object insertcustomeradvance(int c_id,String amount, Date date) {
+		int realAmount = Integer.valueOf(amount);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String currentDate = dateFormat.format(date);
+
+		String query = "insert into CustomerAdvance(c_id,amount,date) values('"
+				+ c_id
+				+ "','"
+				+ realAmount
+				+ "','"
+				+ currentDate
+				+ "');";
+		Statement stmt = null;
+		String errorMessage = "";
+		int result = -1;
+		try {
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+			e.printStackTrace();
+		}
+		return new Object[] { result,errorMessage };
+
+	}
+
+	public Object insertemployeeadvance(int l_id,String amount, Date date) {
+		int realAmount = Integer.valueOf(amount);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String currentDate = dateFormat.format(date);
+
+		String query = "insert into EmployeeAdvance(e_id,amount,date) values('"
+				+ l_id
+				+ "','"
+				+ realAmount
+				+ "','"
+				+ currentDate
+				+ "');";
+		Statement stmt = null;
+		String errorMessage = "";
+		int result = -1;
+		try {
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+			e.printStackTrace();
+		}
+		return new Object[] { result,errorMessage };
+
+	}
+
 	public Object insertLandEntry(String date,String amount, String purpose) {
 		float realAmount = Float.valueOf(amount);
 
@@ -404,7 +508,7 @@ System.err.println("DatabaseHelper 227");
 
 	}
 
-	public int addNewEmployee(String name, int phone, String pAddress,
+	public int addNewEmployee(String name, long phone, String pAddress,
 			String tAddress, String post, int salary) {
 		String query = "INSERT INTO employee (E_Name,E_Type,PAddress,TAddress,Phone,Salary) values ('"
 				+ name
@@ -924,6 +1028,21 @@ String currentDate = dateFormat.format(date);
 
 
 	}
+	
+	public  void updateemployee(int id) {
+		String query = "UPDATE employee SET Remove = 'Remove' WHERE E_id ='"+id+"'";
+			Statement stmt = null;
+			int result = -1;
+			try {
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
+			} catch (Exception e) {
+			e.printStackTrace();
+			}
+
+
+	}
+
 
 	public  void updateleader(int id,String name,String address, String mobile,String telephone,float rate) {
 		String query = "UPDATE leader SET name = '"+name+"', address ='"+address+"', mobile ='"+mobile+"', telephone ='"+telephone+"', rate ='"+rate+"' WHERE id ='"+id+"'";

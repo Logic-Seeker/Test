@@ -1,10 +1,12 @@
 package com.brick.panel;
 
+import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import java.awt.Color;
+import javax.swing.JLabel;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
+import java.awt.Color;
 import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,46 +17,49 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import javax.xml.crypto.Data;
 
 import com.brick.database.DatabaseHelper;
 import com.brick.helper.ComboBoxItemEditor;
 import com.brick.helper.ComboBoxItemRenderer;
+import com.brick.helper.CustomerHelper;
 import com.brick.helper.EmployeeHelper;
 import com.brick.helper.LaborHelper;
 
-public class EmployeeAdvance extends JPanel {
+public class CustomerAdvance extends JPanel {
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	Date date = new Date();
 	String currentDate = dateFormat.format(date);
 	private final JPanel panel = new JPanel();
 	private final JPanel panel_1 = new JPanel();
 	private final JLabel lblAdvance = new JLabel("Advance");
-	private final JLabel lblEmployeeName = new JLabel("Employee Name");
-	private final JLabel lblAmount = new JLabel("Amount");
+	private final JLabel lblCustomerName = new JLabel("Customer Name");
 	private final JLabel lblDate = new JLabel("Date");
+	private final JLabel lblAmount = new JLabel("Amount");
 	private final JTextField textField = new JTextField();
 	private final JTextField textDate = new JTextField(currentDate);
-	private final JComboBox<EmployeeHelper> comboBoxEmployeeName = new JComboBox<EmployeeHelper>();
-	private final JButton btnSubmit = new JButton("Submit");
+	private final JComboBox<LaborHelper> customername = new JComboBox<LaborHelper>();
+	private final JButton btnNewButton = new JButton("New button");
 	DatabaseHelper databasehelper = new DatabaseHelper();
 	private DefaultComboBoxModel model;
 	String numToken = "[\\p{Digit}]+";
+
+
 	/**
 	 * Create the panel.
 	 */
-	public EmployeeAdvance() {
+	public CustomerAdvance() {
 		textField.setFont(new Font("Dialog", Font.PLAIN, 14));
 		textField.setColumns(10);
 
 		initGUI();
 	}
 	private void initGUI() {
+		populateCustomer();
 		setLayout(new BorderLayout(0, 0));
 		
 		add(panel, BorderLayout.CENTER);
@@ -67,13 +72,13 @@ public class EmployeeAdvance extends JPanel {
 		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0};
 		panel.setLayout(gbl_panel);
 		
-		GridBagConstraints gbc_lblEmployeeName = new GridBagConstraints();
-		gbc_lblEmployeeName.anchor = GridBagConstraints.WEST;
-		gbc_lblEmployeeName.insets = new Insets(0, 0, 5, 5);
-		gbc_lblEmployeeName.gridx = 0;
-		gbc_lblEmployeeName.gridy = 0;
-		lblEmployeeName.setFont(new Font("Dialog", Font.BOLD, 14));
-		panel.add(lblEmployeeName, gbc_lblEmployeeName);
+		GridBagConstraints gbc_lblCustomerName = new GridBagConstraints();
+		gbc_lblCustomerName.anchor = GridBagConstraints.WEST;
+		gbc_lblCustomerName.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCustomerName.gridx = 0;
+		gbc_lblCustomerName.gridy = 0;
+		lblCustomerName.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel.add(lblCustomerName, gbc_lblCustomerName);
 		
 		GridBagConstraints gbc_lblDate = new GridBagConstraints();
 		gbc_lblDate.anchor = GridBagConstraints.WEST;
@@ -83,28 +88,13 @@ public class EmployeeAdvance extends JPanel {
 		lblDate.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(lblDate, gbc_lblDate);
 		
-		
-		
-		GridBagConstraints gbc_comboBoxEmployeeName = new GridBagConstraints();
-		gbc_comboBoxEmployeeName.insets = new Insets(7, 0, 7, 5);
-		gbc_comboBoxEmployeeName.fill = GridBagConstraints.BOTH;
-		gbc_comboBoxEmployeeName.gridx = 1;
-		gbc_comboBoxEmployeeName.gridy = 0;
-		
-		comboBoxEmployeeName.setFont(new Font("Dialog", Font.BOLD, 14));
-		panel.add(comboBoxEmployeeName, gbc_comboBoxEmployeeName);
-		ArrayList<EmployeeHelper> employeelist = new ArrayList<EmployeeHelper>();
-		employeelist = databasehelper.fetchEmployeeName();
-		comboBoxEmployeeName.setEditable(true);
-		comboBoxEmployeeName.setRenderer(new ComboBoxItemRenderer());
-		comboBoxEmployeeName.setEditor(new ComboBoxItemEditor());
-		model = new DefaultComboBoxModel();
-		comboBoxEmployeeName.setModel(model);
-		for (EmployeeHelper employeeHelper : employeelist) {
-			model.addElement(employeeHelper);
-			System.out.println(employeeHelper.name);
-		}
-		
+		GridBagConstraints gbc_comboBox = new GridBagConstraints();
+		gbc_comboBox.insets = new Insets(7, 0, 7, 0);
+		gbc_comboBox.fill = GridBagConstraints.BOTH;
+		gbc_comboBox.gridx = 1;
+		gbc_comboBox.gridy = 0;
+		customername.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel.add(customername, gbc_comboBox);
 		
 		GridBagConstraints gbc_lblAmount = new GridBagConstraints();
 		gbc_lblAmount.insets = new Insets(0, 0, 5, 5);
@@ -113,8 +103,6 @@ public class EmployeeAdvance extends JPanel {
 		gbc_lblAmount.gridy = 1;
 		lblAmount.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(lblAmount, gbc_lblAmount);
-		
-		
 		
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.insets = new Insets(7, 0, 7, 0);
@@ -130,19 +118,19 @@ public class EmployeeAdvance extends JPanel {
 		gbc_textDate.gridy = 2;
 		panel.add(textDate, gbc_textDate);
 		
-		GridBagConstraints gbc_btnSubmit = new GridBagConstraints();
-		gbc_btnSubmit.gridwidth = 2;
-		gbc_btnSubmit.insets = new Insets(0, 0, 0, 5);
-		gbc_btnSubmit.gridx = 0;
-		gbc_btnSubmit.gridy = 3;
-		btnSubmit.setFont(new Font("Dialog", Font.BOLD, 14));
-		panel.add(btnSubmit, gbc_btnSubmit);
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.gridwidth = 2;
+		gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
+		gbc_btnNewButton.gridx = 0;
+		gbc_btnNewButton.gridy = 3;
+		btnNewButton.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel.add(btnNewButton, gbc_btnNewButton);
 		panel_1.setBackground(Color.GRAY);
-		btnSubmit.addActionListener(new ActionListener() 
+		btnNewButton.addActionListener(new ActionListener() 
 		{
 			public void actionPerformed(ActionEvent e) 
 				{
-					int id =((EmployeeHelper) comboBoxEmployeeName.getSelectedItem()).id;
+					int id =((CustomerHelper) customername.getSelectedItem()).id;
 					String amount =textField.getText();
 					try {
 						date = dateFormat.parse(textDate.getText());
@@ -157,7 +145,7 @@ public class EmployeeAdvance extends JPanel {
 						JOptionPane.showMessageDialog(null, "Please check the amount", "Failed", JOptionPane.ERROR_MESSAGE);
 					}
 					
-					Object result[]=(Object[])databasehelper.insertemployeeadvance(id, amount, date);
+					Object result[]=(Object[])databasehelper.insertcustomeradvance(id, amount, date);
 					
 					if ((Integer)result[0] == 1)
 					{
@@ -178,5 +166,22 @@ public class EmployeeAdvance extends JPanel {
 		
 		panel_1.add(lblAdvance);
 	}
+	
+	public void populateCustomer(){
+		ArrayList<CustomerHelper> list = new ArrayList<CustomerHelper>();
+		list = databasehelper.fetchCustomerName();
+		customername.setEditable(true);
+		customername.setRenderer(new ComboBoxItemRenderer());
+		customername.setEditor(new ComboBoxItemEditor());
+		model=new DefaultComboBoxModel();
+		customername.setModel(model);
+		
+		for (CustomerHelper customerHelper : list) {
+
+			model.addElement(customerHelper);
+		}
+
+	}
+
 
 }

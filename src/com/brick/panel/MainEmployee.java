@@ -15,6 +15,8 @@ public class MainEmployee extends JPanel {
 	Employee employee = new Employee();
 	EmployeeAttendance emoployeeattendance = new EmployeeAttendance();
 	private final JPanel panel_4 = new JPanel();
+	EmployeeRecords record = new EmployeeRecords();
+	
 	/**
 	 * Create the panel.
 	 */
@@ -23,6 +25,9 @@ public class MainEmployee extends JPanel {
 		initGUI();
 	}
 	private void initGUI() {
+		
+		employee.set(record);
+		record.setrecord(record);
 		setLayout(new BorderLayout(0, 0));
 		
 		add(tabbedPane, BorderLayout.CENTER);

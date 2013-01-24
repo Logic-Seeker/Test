@@ -34,6 +34,7 @@ public class EmployeeRecords extends JPanel implements TableModelListener {
     DefaultTableModel test;
     String numToken = "[\\p{Digit}]+";
     boolean isTableInit=false;
+    EmployeeRecords record;
 
 
 	/**
@@ -50,7 +51,8 @@ public class EmployeeRecords extends JPanel implements TableModelListener {
 			ResultSetMetaData metaData = (ResultSetMetaData) resultSet
 					.getMetaData();
 			int columns = metaData.getColumnCount();
-
+			System.err.println("EmployeeRecords"+columns);
+			
 			for (int i = 1; i <= columns; i++) {
 				columnNames.addElement(metaData.getColumnName(i));
 			}
@@ -157,10 +159,24 @@ public void tableChanged(TableModelEvent e) {
 			System.err.println("gooooo");
 			return;
 		}
+		
+		if (column==7)
+		{
+
+			databaseHelper.updateemployee(id);
+			table.getModel().removeTableModelListener(this);
+			populateTable();
+			table.getModel().addTableModelListener(this);
+		}
 		int	sa = Integer.parseInt(salary);
 		int ph = Integer.parseInt(phone);
 		databaseHelper.updateemployee(id, name, type, paddress,taddress,sa,ph);
 
+		}
+
+		void setrecord(EmployeeRecords records)
+		{
+			this.record = records;
 		}
 
 }

@@ -6,7 +6,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,6 +18,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -30,15 +34,16 @@ public class LabourAdvance extends JPanel {
 	private final JLabel lblLabourName = new JLabel("Labour Name");
 	private final JLabel lblAmount = new JLabel("Amount");
 	private final JLabel lblDate = new JLabel("Date");
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	Date date = new Date();
+	String currentDate = dateFormat.format(date);
 	private final JTextField textField = new JTextField();
-	private final JTextField datefield = new JTextField();
+	private final JTextField datefield = new JTextField(currentDate);
 	private final JComboBox<LaborHelper> labourname = new JComboBox<LaborHelper>();
 	private final JButton btnSubmit = new JButton("Submit");
 	DatabaseHelper databasehelper = new DatabaseHelper();
 	private DefaultComboBoxModel model;
-	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	Date date = new Date();
-	String currentDate = dateFormat.format(date);
+	String numToken = "[\\p{Digit}]+";
 
 	/**
 	 * Create the panel.
@@ -117,6 +122,38 @@ public class LabourAdvance extends JPanel {
 		btnSubmit.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(btnSubmit, gbc_btnSubmit);
 		panel_1.setBackground(Color.GRAY);
+		btnSubmit.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+				{
+					int id =((LaborHelper) labourname.getSelectedItem()).id;
+					String amount =textField.getText();
+					try {
+						date = dateFormat.parse(datefield.getText());
+					} catch (ParseException e1) {
+					
+						e1.printStackTrace();
+						return;
+					}
+					
+					if (amount.trim().isEmpty() && !amount.matches(numToken))
+					{
+						JOptionPane.showMessageDialog(null, "Please check the amount", "Failed", JOptionPane.ERROR_MESSAGE);
+					}
+					
+					Object result[]=(Object[])databasehelper.insertlaboradvance(id, amount, date);
+					
+					if ((Integer)result[0] == 1)
+					{
+						JOptionPane.showMessageDialog(null,
+								"New entry success", "Success",
+								JOptionPane.INFORMATION_MESSAGE);
+						datefield.setText(currentDate);
+						textField.setText("");
+					}
+					
+				}
+		});
 		
 		add(panel_1, BorderLayout.NORTH);
 		lblAdvance.setForeground(new Color(0, 191, 255));

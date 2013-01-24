@@ -4,7 +4,6 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JTabbedPane;
 
-import com.brick.helper.CustomerAdvance;
 
 public class MainCustomer extends JPanel {
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);

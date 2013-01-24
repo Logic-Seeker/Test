@@ -42,6 +42,7 @@ public class Employee extends JPanel {
 	private final JTextField txtSalary = new JTextField();
 	private final JButton btnCreate = new JButton("Add");
 	private JPanel panelAddEmployee;
+	EmployeeRecords record = new EmployeeRecords();
 
 	/**
 	 * Create the panel.
@@ -173,7 +174,7 @@ public class Employee extends JPanel {
 
 				DatabaseHelper databasehelper = new DatabaseHelper();
 				String name = txtEmployeeName.getText().trim();
-				int phone = Integer.valueOf(txtPhoneNo.getText().toString()
+				long phone = Long.valueOf(txtPhoneNo.getText().toString()
 						.trim().isEmpty() ? "0" : txtPhoneNo.getText()
 						.toString().trim());
 				String pAddress = txtPermanentAddress.getText();
@@ -200,6 +201,7 @@ public class Employee extends JPanel {
 					JOptionPane.showMessageDialog(null,
 							"New Employee Added Successfully", "SUCCESS",
 							JOptionPane.DEFAULT_OPTION);
+					record.populateTable();
 
 				}
 
@@ -236,5 +238,10 @@ public class Employee extends JPanel {
 		});
 
 		//panel_3.add(button);
+	}
+	
+	void set(EmployeeRecords records)
+	{
+		this.record = records;
 	}
 }
