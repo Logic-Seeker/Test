@@ -1152,11 +1152,11 @@ public class DatabaseHelper {
 
 	public void generateReport(String reportPath) {
 
-		String reportName = "report/labourreport.jrxml";
+		
 
 		try {
 			JasperReport jasperReport = JasperCompileManager
-					.compileReport(reportName);
+					.compileReport(reportPath);
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(
 					jasperReport, null, connection);

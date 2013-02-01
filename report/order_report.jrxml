@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="order_report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT O.ID,C.NAME,O.DESTINATION,O.no_of_brick,O.no_of_halfbrick,O.is_delivered
+FROM order_entry O,customer C
+WHERE O.CUSTOMER_ID=C.ID]]>
+	</queryString>
+	<field name="ID" class="java.lang.Integer"/>
+	<field name="NAME" class="java.lang.String"/>
+	<field name="DESTINATION" class="java.lang.String"/>
+	<field name="no_of_brick" class="java.lang.Integer"/>
+	<field name="no_of_halfbrick" class="java.lang.Integer"/>
+	<field name="is_delivered" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="53" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Transparent" x="196" y="15" width="143" height="33"/>
+				<textElement>
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[Order Report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="20" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement  x="0" y="0" width="555" height="20" backcolor="#CCCCFF"/>
+			</rectangle>
+			<staticText>
+				<reportElement  x="2" y="0" width="40" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Order No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="42" y="0" width="129" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="427" y="1" width="64" height="19"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Half Bricks]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="493" y="1" width="62" height="19"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[IS Delivered]]></text>
+			</staticText>
+			<line>
+				<reportElement  x="43" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="171" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="429" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement  x="491" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="555" y="0" width="1" height="20"/>
+			</line>
+			<staticText>
+				<reportElement x="172" y="0" width="185" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[DESTINATION]]></text>
+			</staticText>
+			<line>
+				<reportElement x="358" y="0" width="1" height="20"/>
+			</line>
+			<staticText>
+				<reportElement  x="357" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[No Of Bricks]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="29" splitType="Stretch">
+			<textField>
+				<reportElement  x="431" y="2" width="60" height="19"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{no_of_halfbrick}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement  x="2" y="19" width="552" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="3" y="0" width="40" height="20"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA[$F{ID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement  x="45" y="1" width="127" height="20"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement  x="361" y="0" width="70" height="19"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{no_of_brick}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement  stretchType="RelativeToBandHeight" x="174" y="0" width="187" height="19"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA[$F{DESTINATION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement  x="491" y="2" width="60" height="19"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{is_delivered}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="38" splitType="Stretch">
+			<textField>
+				<reportElement  x="412" y="6" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement  x="492" y="6" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="23" splitType="Stretch"/>
+	</summary>
+</jasperReport>
