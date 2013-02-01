@@ -55,6 +55,7 @@ public class EmployeeAdvance extends JPanel {
 		initGUI();
 	}
 	private void initGUI() {
+		populateEmployeeAdvance();
 		setLayout(new BorderLayout(0, 0));
 		
 		add(panel, BorderLayout.CENTER);
@@ -93,19 +94,7 @@ public class EmployeeAdvance extends JPanel {
 		
 		comboBoxEmployeeName.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(comboBoxEmployeeName, gbc_comboBoxEmployeeName);
-		ArrayList<EmployeeHelper> employeelist = new ArrayList<EmployeeHelper>();
-		employeelist = databasehelper.fetchEmployeeName();
-		comboBoxEmployeeName.setEditable(true);
-		comboBoxEmployeeName.setRenderer(new ComboBoxItemRenderer());
-		comboBoxEmployeeName.setEditor(new ComboBoxItemEditor());
-		model = new DefaultComboBoxModel();
-		comboBoxEmployeeName.setModel(model);
-		for (EmployeeHelper employeeHelper : employeelist) {
-			model.addElement(employeeHelper);
-			System.out.println(employeeHelper.name);
-		}
-		
-		
+	
 		GridBagConstraints gbc_lblAmount = new GridBagConstraints();
 		gbc_lblAmount.insets = new Insets(0, 0, 5, 5);
 		gbc_lblAmount.anchor = GridBagConstraints.WEST;
@@ -178,5 +167,20 @@ public class EmployeeAdvance extends JPanel {
 		
 		panel_1.add(lblAdvance);
 	}
+	public void populateEmployeeAdvance(){
+		ArrayList<EmployeeHelper> employeelist = new ArrayList<EmployeeHelper>();
+		employeelist = databasehelper.fetchEmployeeName();
+		comboBoxEmployeeName.setEditable(true);
+		comboBoxEmployeeName.setRenderer(new ComboBoxItemRenderer());
+		comboBoxEmployeeName.setEditor(new ComboBoxItemEditor());
+		model = new DefaultComboBoxModel();
+		comboBoxEmployeeName.setModel(model);
+		for (EmployeeHelper employeeHelper : employeelist) {
+			model.addElement(employeeHelper);
+			System.out.println(employeeHelper.name);
+		}
+		this.revalidate();
+		}
+	
 
 }

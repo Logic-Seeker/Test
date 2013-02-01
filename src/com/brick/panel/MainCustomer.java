@@ -13,12 +13,16 @@ public class MainCustomer extends JPanel {
 	Customer customer = new Customer();
 	private final JPanel panel_2 = new JPanel();
 	private final JPanel panel_3 = new JPanel();
+	CustomerAdvance advance = new CustomerAdvance();
 	/**
 	 * Create the panel.
 	 */
 	public MainCustomer() {
 
 		initGUI();
+		customer.setrecords(record);
+		customer.setAdvance(advance);
+		record.setAdvance(advance);
 	}
 	private void initGUI() {
 		setLayout(new BorderLayout(0, 0));
@@ -38,6 +42,6 @@ public class MainCustomer extends JPanel {
 		
 		tabbedPane.addTab("Advance", null, panel_3, null);
 		panel_3.setLayout(new BorderLayout(0, 0));
-		panel_3.add(new CustomerAdvance());
+		panel_3.add(advance);
 	}
 }

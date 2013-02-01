@@ -3,7 +3,7 @@ package com.brick.helper;
 public class LeaderHelper {
 
 	
-		public int id;
-		public String name;
+		public int id=0;
+		public String name="";
 		
 }

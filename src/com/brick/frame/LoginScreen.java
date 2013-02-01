@@ -23,6 +23,7 @@ public class LoginScreen extends JFrame {
 	private JPasswordField txtPasswd;
 	private JButton btnLogin, btnCancel;
 	JFrame currentFrame;
+	public static int id;
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 
 	public LoginScreen() {
@@ -96,7 +97,8 @@ public class LoginScreen extends JFrame {
 						
 						txtUser.getText().toString(),txtPasswd.getText()
 								.toString())) {
-					System.out.println("is valid");
+					id = databaseHelper.getid(txtUser.getText().toString(),txtPasswd.getText()
+							.toString());
 					currentFrame.setVisible(false);
 					new MainWindow();
 					

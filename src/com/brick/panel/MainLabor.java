@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JTabbedPane;
 
+
 public class MainLabor extends JPanel {
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 	private final JPanel panel = new JPanel();
@@ -49,6 +50,7 @@ public class MainLabor extends JPanel {
 		
 		tabbedPane.addTab("Labor Reports\n", null, panel_3, null);
 		panel_3.setLayout(new BorderLayout(0, 0));
+		panel_3.add(new LabourReport());
 		
 		tabbedPane.addTab("Advance", null, panel_4, null);
 		panel_4.setLayout(new BorderLayout(0, 0));

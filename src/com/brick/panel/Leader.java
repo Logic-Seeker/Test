@@ -34,6 +34,8 @@ public class Leader extends JPanel {
 	private final JButton btnAddLeader = new JButton("Add Leader");
 	String floatcheck = "^([0-9]\\d*|0)(\\.\\d)?$";
 	DatabaseHelper databaseHelper = new DatabaseHelper();
+	LeaderAdvance advance =new LeaderAdvance();
+	LeaderRecords record = new LeaderRecords();
 	/**
 	 * Create the panel.
 	 */
@@ -186,6 +188,7 @@ public class Leader extends JPanel {
 				}
 				}
 				
+				
 				int result = databaseHelper.insertleader(name,address,mobile,telephone,rate);
 				if(result == 1)
 				{
@@ -197,6 +200,8 @@ public class Leader extends JPanel {
 				txtmobile.setText("");
 				txtrate.setText("");
 				txttelephone.setText("");
+				record.populateTable();
+				advance.populateLeader();
 				
 				}
 				else
@@ -215,6 +220,15 @@ public class Leader extends JPanel {
 		lblAddNewLeader.setForeground(new Color(0, 255, 255));
 		
 		panel_1.add(lblAddNewLeader);
+	}
+	
+	public void setAdvance(LeaderAdvance advances)
+	{
+		this.advance= advances;
+	}
+	public void setRecords(LeaderRecords records)
+	{
+		this.record = records;
 	}
 
 }

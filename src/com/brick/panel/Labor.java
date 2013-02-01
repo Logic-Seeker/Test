@@ -237,6 +237,7 @@ public class Labor extends JPanel {
 	
 	public void setLaborRecord(LaborRecords laborRecords){
 	
+		System.err.println("here i am");
 		this.laborRecord = laborRecords;
 	}
 	public void setLaborWork(LaborWork laborWorks){

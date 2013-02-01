@@ -47,6 +47,7 @@ public class CustomerAdvance extends JPanel {
 	DatabaseHelper databasehelper = new DatabaseHelper();
 	private DefaultComboBoxModel model;
 	String numToken = "[\\p{Digit}]+";
+	
 
 
 	/**
@@ -176,6 +177,10 @@ public class CustomerAdvance extends JPanel {
 		model=new DefaultComboBoxModel();
 		customername.setModel(model);
 		
+		if (list.isEmpty())
+		{
+			model.addElement(new CustomerHelper());
+		}
 		for (CustomerHelper customerHelper : list) {
 
 			model.addElement(customerHelper);

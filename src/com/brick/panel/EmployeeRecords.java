@@ -2,11 +2,14 @@ package com.brick.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -16,10 +19,10 @@ import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import com.brick.database.DatabaseHelper;
 import com.mysql.jdbc.ResultSetMetaData;
-import com.sun.xml.internal.ws.api.ha.StickyFeature;
 
 public class EmployeeRecords extends JPanel implements TableModelListener {
 	private final JPanel panel = new JPanel();
@@ -35,6 +38,8 @@ public class EmployeeRecords extends JPanel implements TableModelListener {
     String numToken = "[\\p{Digit}]+";
     boolean isTableInit=false;
     EmployeeRecords record;
+    EmployeeAdvance employeeAdvance;
+    EmployeeAttendance attendance = new EmployeeAttendance();
 
 
 	/**
@@ -51,11 +56,11 @@ public class EmployeeRecords extends JPanel implements TableModelListener {
 			ResultSetMetaData metaData = (ResultSetMetaData) resultSet
 					.getMetaData();
 			int columns = metaData.getColumnCount();
-			System.err.println("EmployeeRecords"+columns);
+			
 			
 			for (int i = 1; i <= columns; i++) {
-				columnNames.addElement(metaData.getColumnName(i));
-			}
+				columnNames.addElement(metaData.getColumnLabel(i));
+				}
 			data.removeAllElements();
 			while (resultSet.next()) {
 				row = new Vector(columns);
@@ -79,12 +84,35 @@ public class EmployeeRecords extends JPanel implements TableModelListener {
 					return column == 1 || column == 3 || column == 4 || column ==5 || column ==6 || column ==7;
 				}
 			};
-			 
-			table = new JTable(test);
+			test.addTableModelListener(this);
+			table = new JTable(test){
+				  public Component prepareRenderer
+				  (TableCellRenderer renderer,int Index_row, int Index_col) {
+				  Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
+				  //even index, selected or not selected
+				  if (Index_row % 2 == 0 && !isCellSelected(Index_row, Index_col)) {
+				  comp.setBackground(Color.lightGray);
+				  } 
+				  else if (isRowSelected(Index_row))
+				  {
+					  comp.setBackground(Color.BLUE);
+				  }
+				  else {
+				  comp.setBackground(Color.white);
+				  }
+				  return comp;
+				  }
+				  };
+			//table.getTableHeader().setBackground(Color.blue);
+			//table.setBorder(BorderFactory.createLineBorder(Color.black,4));
 			table.getColumnModel().getColumn(0).setMaxWidth(0);
 		    table.getColumnModel().getColumn(0).setMinWidth(0);
 		    table.getColumnModel().getColumn(0).setPreferredWidth(0);
 			isTableInit = true;
+			table.setRowHeight(20);
+			//Dimension dim = new Dimension(20,1);
+			//table.setIntercellSpacing(new Dimension(dim));
+			
 		}
 
 		int count = table.getRowCount();
@@ -94,17 +122,15 @@ public class EmployeeRecords extends JPanel implements TableModelListener {
 		table.revalidate();
 		scrollPane.setViewportView(table);
 		table.isCellEditable(1, 1);
-		table.getModel().addTableModelListener(this);
-
-
 		table.getColumn("Remove").setCellRenderer(new ButtonRenderer());
 		table.getColumn("Remove").setCellEditor(new ButtonEditor(new JCheckBox(),-1,-1));
-
+		
 
 		
 	}
 
 	private void initGUI() {
+		System.err.println("step 3");
 		setLayout(new BorderLayout(0, 0));
 		
 		add(panel, BorderLayout.CENTER);
@@ -127,6 +153,7 @@ public void tableChanged(TableModelEvent e) {
 			table.getColumn("Remove").setCellEditor(new ButtonEditor(new JCheckBox(),-1,-1));
 			return;
 		}
+		System.err.println("step 4");
 		int row = e.getFirstRow();
 		int column = e.getColumn();
 			
@@ -166,6 +193,8 @@ public void tableChanged(TableModelEvent e) {
 			databaseHelper.updateemployee(id);
 			table.getModel().removeTableModelListener(this);
 			populateTable();
+			employeeAdvance.populateEmployeeAdvance();
+			attendance.populateAttendance();
 			table.getModel().addTableModelListener(this);
 		}
 		int	sa = Integer.parseInt(salary);
@@ -178,5 +207,15 @@ public void tableChanged(TableModelEvent e) {
 		{
 			this.record = records;
 		}
+		
+		public void setEmployeeAdvance(EmployeeAdvance employeeAdvances){
+			
+			this.employeeAdvance = employeeAdvances;
+		}
+		public void setattendance(EmployeeAttendance attendances)
+		{
+			this.attendance = attendances;
+		}
+
 
 }

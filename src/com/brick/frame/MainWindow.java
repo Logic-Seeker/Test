@@ -29,7 +29,6 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
 import com.brick.helper.ToolBarUtils;
-import com.brick.panel.AddBrickType;
 import com.brick.panel.Customer;
 import com.brick.panel.Employee;
 import com.brick.panel.EmployeeAttendance;
@@ -46,7 +45,6 @@ import com.brick.panel.MainOrder;
 import com.brick.panel.NewUser;
 import com.brick.panel.NewVehicle;
 import com.brick.panel.Order;
-import com.brick.panel.OrderForm;
 import com.brick.panel.OrderReport;
 
 public class MainWindow extends JFrame implements WindowListener {

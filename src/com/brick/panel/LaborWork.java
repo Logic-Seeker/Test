@@ -873,11 +873,11 @@ public class LaborWork extends JPanel {
 		labourname.setModel(model);
 		if(list.isEmpty())
 		{
-			System.err.println("laborwork 876");
+			
 			labourname.setSelectedItem(new LaborHelper());
 		}
 		for (LaborHelper laborHelper : list) {
-
+			System.err.println("laborwork 876");
 			model.addElement(laborHelper);
 		}
 

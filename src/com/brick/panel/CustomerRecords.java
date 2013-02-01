@@ -2,6 +2,7 @@ package com.brick.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,6 +17,7 @@ import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import com.brick.database.DatabaseHelper;
 import com.mysql.jdbc.ResultSetMetaData;
@@ -33,6 +35,7 @@ public class CustomerRecords extends JPanel implements TableModelListener{
     DefaultTableModel test;
     String numToken = "[\\p{Digit}]+";
     boolean isTableInit=false;
+    CustomerAdvance advance = new CustomerAdvance();
 
 	/**
 	 * Create the panel.
@@ -40,6 +43,7 @@ public class CustomerRecords extends JPanel implements TableModelListener{
 	public CustomerRecords() {
 
 		initGUI();
+		table.getModel().addTableModelListener(this);
 	}
 public void populateTable(){
 		
@@ -50,7 +54,7 @@ public void populateTable(){
 			int columns = metaData.getColumnCount();
 
 			for (int i = 1; i <= columns; i++) {
-				columnNames.addElement(metaData.getColumnName(i));
+				columnNames.addElement(metaData.getColumnLabel(i));
 			}
 			data.removeAllElements();
 			while (resultSet.next()) {
@@ -76,11 +80,29 @@ public void populateTable(){
 				}
 			};
 			 
-			table = new JTable(test);
+			table = new JTable(test){
+				  public Component prepareRenderer
+				  (TableCellRenderer renderer,int Index_row, int Index_col) {
+				  Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
+				  //even index, selected or not selected
+				  if (Index_row % 2 == 0 && !isCellSelected(Index_row, Index_col)) {
+				  comp.setBackground(Color.lightGray);
+				  } 
+				  else if (isRowSelected(Index_row))
+				  {
+					  comp.setBackground(Color.BLUE);
+				  }
+				  else {
+				  comp.setBackground(Color.white);
+				  }
+				  return comp;
+				  }
+				  };
 			table.getColumnModel().getColumn(0).setMaxWidth(0);
 		    table.getColumnModel().getColumn(0).setMinWidth(0);
 		    table.getColumnModel().getColumn(0).setPreferredWidth(0);
 			isTableInit = true;
+			table.setRowHeight(20);
 		}
 
 		int count = table.getRowCount();
@@ -90,7 +112,7 @@ public void populateTable(){
 		table.revalidate();
 		scrollPane.setViewportView(table);
 		table.isCellEditable(1, 1);
-		table.getModel().addTableModelListener(this);
+		//table.getModel().addTableModelListener(this);
 
 
 		table.getColumn("Remove").setCellRenderer(new ButtonRenderer());
@@ -155,11 +177,22 @@ public void tableChanged(TableModelEvent e) {
 			System.err.println("gooooo");
 			return;
 		}
+		if (column == 6)
+		{	
+			databaseHelper.updatecustomer(id);
+			table.getModel().removeTableModelListener(this);
+			advance.populateCustomer();
+			populateTable();
+			table.getModel().addTableModelListener(this);
+		}
 		long	mo = Long.parseLong(mobile);
 		long teleph = Long.parseLong(telephone);
 		databaseHelper.updatecustomer(id, name,paddress,taddress,mo,teleph);
 
 		}
 
-
+		public void setAdvance(CustomerAdvance advances)
+		{
+			this.advance = advances;
+		}
 }

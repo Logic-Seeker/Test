@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.brick.frame.LoginScreen;
 import com.brick.helper.BrickHelper;
 import com.brick.helper.CustomerHelper;
 import com.brick.helper.EmployeeHelper;
@@ -57,6 +58,27 @@ public class DatabaseHelper {
 		return false;
 	}
 
+	public int getid(String userName, String password) {
+
+		String query = "SELECT * From user";
+		try {
+			pst = connection.prepareStatement(query);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				if (userName.equals(rs.getString("username"))
+						&& password.equals(rs.getString("password"))) {
+					return rs.getInt("user_id");
+				}
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
 	public int addNewUser(String userName, String password) {
 		String query = "INSERT INTO user (username,password) values ('"
 				+ userName + "','" + password + "');";
@@ -99,7 +121,7 @@ public class DatabaseHelper {
 
 	public ArrayList<CustomerHelper> fetchCustomerName() {
 		ArrayList<CustomerHelper> list = new ArrayList<CustomerHelper>();
-		String query = "SELECT * From customer";
+		String query = "SELECT * From customer where Remove='Delete'";
 		try {
 			pst = connection.prepareStatement(query);
 			rs = pst.executeQuery();
@@ -140,7 +162,7 @@ public class DatabaseHelper {
 
 	public ArrayList<EmployeeHelper> fetchEmployeeName() {
 		ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
-		String query = "SELECT * From employee";
+		String query = "SELECT * From employee where Remove='Delete'";
 		System.out.println("check");
 		try {
 			pst = connection.prepareStatement(query);
@@ -159,9 +181,8 @@ public class DatabaseHelper {
 	}
 	
 	public ResultSet fetchEmployee() {
-		ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
-		String query = "SELECT * From employee where Remove='Delete'";
-		System.out.println("check");
+	//	ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
+		String query = "SELECT E_id, E_Name as Name, E_Type as Post, PAddress as 'Permanent Address', TAddress as 'Temporary Address', Salary, Phone, Remove FROM employee where Remove='Delete'";
 		try {
 			pst = connection.prepareStatement(query);
 			rs = pst.executeQuery();
@@ -225,7 +246,7 @@ public class DatabaseHelper {
 
 	public ResultSet fetchlaborrecords() throws SQLException {
 System.err.println("DatabaseHelper 227");
-		String query = "SELECT * from labour where Remove = 'Delete';";
+		String query = "SELECT id,name as Name,type as 'Labour Type',brick_amount as 'Brick Amount',Remove from labour where Remove = 'Delete';";
 		Statement stmt = null;
 		String errorMessage = "";
 		//int result = -1;
@@ -253,7 +274,7 @@ System.err.println("DatabaseHelper 227");
 
 	public ResultSet fetchleaderrecords() throws SQLException {
 
-		String query = "SELECT * from leader;";
+		String query = "SELECT id,name as Name,address as Address,mobile as 'Mobile No.',telephone as 'Telephone No.',rate as Rate,Remove from leader where Remove='Delete';";
 		Statement stmt = null;
 		String errorMessage = "";
 		//int result = -1;
@@ -268,7 +289,7 @@ System.err.println("DatabaseHelper 227");
 
 	public ResultSet fetchcustomerrecords() throws SQLException {
 
-		String query = "SELECT * from customer;";
+		String query = "SELECT id,name as Name,PAddress as 'Permanent Address',TAddress as 'Temporary Address',MobileNo as 'Mobile No.',TelephoneNo as 'Telephone No.',Remove from customer where Remove='Delete';";
 		Statement stmt = null;
 		String errorMessage = "";
 		//int result = -1;
@@ -411,13 +432,13 @@ System.err.println("DatabaseHelper 227");
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String currentDate = dateFormat.format(date);
 
-		String query = "insert into LeaderAdvance(le_id,amount,date) values('"
+		String query = "insert into LeaderAdvance(le_id,amount,date,u_id) values('"
 				+ le_id
 				+ "','"
 				+ realAmount
 				+ "','"
 				+ currentDate
-				+ "');";
+				+ "','"+LoginScreen.id+"');";
 		Statement stmt = null;
 		String errorMessage = "";
 		int result = -1;
@@ -437,13 +458,13 @@ System.err.println("DatabaseHelper 227");
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String currentDate = dateFormat.format(date);
 
-		String query = "insert into CustomerAdvance(c_id,amount,date) values('"
+		String query = "insert into CustomerAdvance(c_id,amount,date,u_id) values('"
 				+ c_id
 				+ "','"
 				+ realAmount
 				+ "','"
 				+ currentDate
-				+ "');";
+				+ "','"+LoginScreen.id+"');";
 		Statement stmt = null;
 		String errorMessage = "";
 		int result = -1;
@@ -463,13 +484,13 @@ System.err.println("DatabaseHelper 227");
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String currentDate = dateFormat.format(date);
 
-		String query = "insert into EmployeeAdvance(e_id,amount,date) values('"
+		String query = "insert into EmployeeAdvance(e_id,amount,date,u_id) values('"
 				+ l_id
 				+ "','"
 				+ realAmount
 				+ "','"
 				+ currentDate
-				+ "');";
+				+ "','"+LoginScreen.id+"');";
 		Statement stmt = null;
 		String errorMessage = "";
 		int result = -1;
@@ -510,7 +531,7 @@ System.err.println("DatabaseHelper 227");
 
 	public int addNewEmployee(String name, long phone, String pAddress,
 			String tAddress, String post, int salary) {
-		String query = "INSERT INTO employee (E_Name,E_Type,PAddress,TAddress,Phone,Salary) values ('"
+		String query = "INSERT INTO employee (E_Name,E_Type,PAddress,TAddress,Phone,Salary,u_id) values ('"
 				+ name
 				+ "','"
 				+ post
@@ -518,7 +539,7 @@ System.err.println("DatabaseHelper 227");
 				+ pAddress
 				+ "','"
 				+ tAddress
-				+ "','" + phone + "','" + salary + "');";
+				+ "','" + phone + "','" + salary + "','"+LoginScreen.id+"');";
 		Statement stmt = null;
 		int result = -1;
 		try {
@@ -571,7 +592,7 @@ System.err.println("DatabaseHelper 227");
 
 	public ArrayList<LeaderHelper> fetchLeaderName() {
 		ArrayList<LeaderHelper> list = new ArrayList<LeaderHelper>();
-		String query = "SELECT * From leader";
+		String query = "SELECT * From leader where Remove='Delete'";
 		try {
 			pst = connection.prepareStatement(query);
 			rs = pst.executeQuery();
@@ -836,8 +857,8 @@ System.err.println("DatabaseHelper 227");
 		if (type == "Patheri") {
 			brick = "0";
 		}
-		String query = "insert into labour(name,type,brick_amount ) values('"
-				+ name + "','" + type + "','" + Integer.valueOf(brick) + "');";
+		String query = "insert into labour(name,type,brick_amount,u_id ) values('"
+				+ name + "','" + type + "','" + Integer.valueOf(brick) + "','"+LoginScreen.id+"');";
 		Statement stmt = null;
 		int result = -1;
 		try {
@@ -853,14 +874,14 @@ System.err.println("DatabaseHelper 227");
 	public int insertWorkEntry(int labourId, int brickID, int noOfBrick,
 			float amount, String date) {
 
-		String query = "insert into labour_transcation(l_id,bd_id,Number,Amount,transcation_date) values('"
+		String query = "insert into labour_transcation(l_id,bd_id,Number,Amount,transcation_date,u_id) values('"
 				+ labourId
 				+ "','"
 				+ brickID
 				+ "','"
 				+ noOfBrick
 				+ "','"
-				+ amount + "','" + date + "');";
+				+ amount + "','" + date + "','"+LoginScreen.id+"');";
 		int result = -1;
 		Statement stmt = null;
 		try {
@@ -877,7 +898,7 @@ System.err.println("DatabaseHelper 227");
 System.err.println(date);
 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 String currentDate = dateFormat.format(date);
-		String query = "insert into attendance(`E_id`,`Date`,`Absent`,`Leaves`,`Reason`) values('"+e_id+"','"+currentDate+"','"+absent+"','"+leave+"','"+reason+"');";
+		String query = "insert into attendance(`E_id`,`Date`,`Absent`,`Leaves`,`Reason`,`u_id`) values('"+e_id+"','"+currentDate+"','"+absent+"','"+leave+"','"+reason+"','"+LoginScreen.id+"');";
 		int result = -1;
 		Statement stmt = null;
 		try {
@@ -893,7 +914,7 @@ String currentDate = dateFormat.format(date);
 	public int insertCustomer(String name,String pAddress,String tAddress,int Mobile,int Telephone)
 	{
 		
-		String query="insert into customer(name,PAddress,TAddress,MobileNo,TelephoneNo ) values('"+name+"','"+pAddress+"','"+tAddress+"','"+Mobile+"','"+Telephone+"');";
+		String query="insert into customer(name,PAddress,TAddress,MobileNo,TelephoneNo,u_id ) values('"+name+"','"+pAddress+"','"+tAddress+"','"+Mobile+"','"+Telephone+"','"+LoginScreen.id+"');";
 		Statement stmt = null;
 		int result =-1;
 		try {
@@ -951,14 +972,22 @@ String currentDate = dateFormat.format(date);
 	
 	public int insertleader(String name,String address,String mobile,String telephone,String rate) {
 			
-			long m = Long.parseLong(mobile);
+			long m = 0;
 			long phone = 0;
+			float r =0;
 			if (!telephone.trim().isEmpty())
 			{
 			phone = Long.parseLong(telephone);
 			}
-			float r = Float.parseFloat(rate);
-			String query = "insert into leader(name,address,mobile,telephone,rate) values('"
+			if (!mobile.trim().isEmpty())
+			{
+			m = Long.parseLong(mobile);
+			}
+			if (!rate.trim().isEmpty())
+			{
+			r = Float.parseFloat(rate);
+			}
+			String query = "insert into leader(name,address,mobile,telephone,rate,u_id) values('"
 			+ name
 			+ "','"
 			+ address
@@ -966,7 +995,7 @@ String currentDate = dateFormat.format(date);
 			+ m
 			+ "','"
 			+ phone + "','"
-			+ r+ "');";
+			+ r+ "','"+LoginScreen.id+"');";
 			Statement stmt = null;
 			int result = -1;
 			try {
@@ -1002,7 +1031,7 @@ String currentDate = dateFormat.format(date);
 	}
 	
 	public  void updatelabour(int id,String name,String type, int bamount) {
-		String query = "UPDATE labour SET name = '"+name+"', brick_amount ='"+bamount+"' WHERE id ='"+id+"'";
+		String query = "UPDATE labour SET name = '"+name+"', brick_amount ='"+bamount+"',u_id='"+LoginScreen.id+"' WHERE id ='"+id+"'";
 			Statement stmt = null;
 			int result = -1;
 			try {
@@ -1028,7 +1057,35 @@ String currentDate = dateFormat.format(date);
 
 
 	}
-	
+
+	public  void updateLeader(int id) {
+		String query = "UPDATE leader SET Remove = 'Remove' WHERE id ='"+id+"'";
+			Statement stmt = null;
+			int result = -1;
+			try {
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
+			} catch (Exception e) {
+			e.printStackTrace();
+			}
+
+
+	}
+
+	public  void updatecustomer(int id) {
+		String query = "UPDATE customer SET Remove = 'Remove' WHERE id ='"+id+"'";
+			Statement stmt = null;
+			int result = -1;
+			try {
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
+			} catch (Exception e) {
+			e.printStackTrace();
+			}
+
+
+	}
+
 	public  void updateemployee(int id) {
 		String query = "UPDATE employee SET Remove = 'Remove' WHERE E_id ='"+id+"'";
 			Statement stmt = null;
@@ -1045,7 +1102,7 @@ String currentDate = dateFormat.format(date);
 
 
 	public  void updateleader(int id,String name,String address, String mobile,String telephone,float rate) {
-		String query = "UPDATE leader SET name = '"+name+"', address ='"+address+"', mobile ='"+mobile+"', telephone ='"+telephone+"', rate ='"+rate+"' WHERE id ='"+id+"'";
+		String query = "UPDATE leader SET name = '"+name+"', address ='"+address+"', mobile ='"+mobile+"', telephone ='"+telephone+"', rate ='"+rate+"',u_id='"+LoginScreen.id+"' WHERE id='"+id+"'";
 			Statement stmt = null;
 			int result = -1;
 			try {
@@ -1059,7 +1116,7 @@ String currentDate = dateFormat.format(date);
 	}
 
 	public  void updateemployee(int id,String name,String type, String paddress,String taddress,int salary,int phone) {
-		String query = "UPDATE employee SET E_Name = '"+name+"', E_Type ='"+type+"', PAddress ='"+paddress+"', TAddress ='"+taddress+"', Salary ='"+salary+"', Phone ='"+phone+"' WHERE E_id ='"+id+"'";
+		String query = "UPDATE employee SET E_Name = '"+name+"', E_Type ='"+type+"', PAddress ='"+paddress+"', TAddress ='"+taddress+"', Salary ='"+salary+"', Phone ='"+phone+"',u_id='"+LoginScreen.id+"' WHERE E_id ='"+id+"'";
 			Statement stmt = null;
 			int result = -1;
 			try {
@@ -1073,7 +1130,7 @@ String currentDate = dateFormat.format(date);
 	}
 
 	public  void updatecustomer(int id,String name,String paddress,String taddress,long mobile,long telephone) {
-		String query = "UPDATE customer SET name = '"+name+"', PAddress ='"+paddress+"', TAddress ='"+taddress+"', MobileNo ='"+mobile+"', TelephoneNo ='"+telephone+"' WHERE id ='"+id+"'";
+		String query = "UPDATE customer SET name = '"+name+"', PAddress ='"+paddress+"', TAddress ='"+taddress+"', MobileNo ='"+mobile+"', TelephoneNo ='"+telephone+"',u_id='"+LoginScreen.id+"' WHERE id ='"+id+"'";
 			Statement stmt = null;
 			int result = -1;
 			try {

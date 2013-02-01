@@ -173,7 +173,11 @@ public class LeaderAdvance extends JPanel {
 		leadername.setRenderer(new ComboBoxItemRenderer());
 		leadername.setEditor(new ComboBoxItemEditor());
 		model=new DefaultComboBoxModel();
-
+		
+		if (list.isEmpty())
+		{
+			model.addElement(new LeaderHelper());
+		}
 		for (LeaderHelper leaderHelper : list) {
 			model.addElement(leaderHelper);
 		}

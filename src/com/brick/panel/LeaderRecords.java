@@ -2,6 +2,7 @@ package com.brick.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,6 +17,7 @@ import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import com.brick.database.DatabaseHelper;
 import com.mysql.jdbc.ResultSetMetaData;
@@ -34,6 +36,7 @@ public class LeaderRecords extends JPanel implements TableModelListener{
 	String numToken = "[\\p{Digit}]+";
 	boolean isTableInit=false;
 	String floatcheck = "^([1-9]\\d*|0)(\\.\\d)?$";
+	LeaderAdvance advance = new LeaderAdvance();
 
 	/**
 	 * Create the panel.
@@ -41,6 +44,18 @@ public class LeaderRecords extends JPanel implements TableModelListener{
 	public LeaderRecords() {
 
 		initGUI();
+		table.getModel().addTableModelListener(this);
+		String date = "2069-09-14";
+		//String newdate = "";
+				/*try {
+			
+			Utilities.getEngFromNepali(date);
+			System.err.println("this is the convered date="+newdate);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
 	}
 
 	public void populateTable(){
@@ -51,7 +66,7 @@ public class LeaderRecords extends JPanel implements TableModelListener{
 			int columns = metaData.getColumnCount();
 
 			for (int i = 1; i <= columns; i++) {
-				columnNames.addElement(metaData.getColumnName(i));
+				columnNames.addElement(metaData.getColumnLabel(i));
 			}
 			data.removeAllElements();
 			while (resultSet.next()) {
@@ -77,11 +92,29 @@ public class LeaderRecords extends JPanel implements TableModelListener{
 				}
 			};
 			 
-			table = new JTable(test);
+			table = new JTable(test){
+				  public Component prepareRenderer
+				  (TableCellRenderer renderer,int Index_row, int Index_col) {
+				  Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
+				  //even index, selected or not selected
+				  if (Index_row % 2 == 0 && !isCellSelected(Index_row, Index_col)) {
+				  comp.setBackground(Color.lightGray);
+				  } 
+				  else if (isRowSelected(Index_row))
+				  {
+					  comp.setBackground(Color.BLUE);
+				  }
+				  else {
+				  comp.setBackground(Color.white);
+				  }
+				  return comp;
+				  }
+				  };
 			table.getColumnModel().getColumn(0).setMaxWidth(0);
 		    table.getColumnModel().getColumn(0).setMinWidth(0);
 		    table.getColumnModel().getColumn(0).setPreferredWidth(0);
 			isTableInit = true;
+			table.setRowHeight(20);
 		}
 
 		int count = table.getRowCount();
@@ -91,7 +124,7 @@ public class LeaderRecords extends JPanel implements TableModelListener{
 		table.revalidate();
 		scrollPane.setViewportView(table);
 		table.isCellEditable(1, 1);
-		table.getModel().addTableModelListener(this);
+		//table.getModel().addTableModelListener(this);
 
 		table.getColumn("Remove").setCellRenderer(new ButtonRenderer());
 		tableChanged(null);
@@ -171,8 +204,20 @@ public class LeaderRecords extends JPanel implements TableModelListener{
 			System.err.println("gooooo");
 			return;
 		}
+		if (column==6)
+		{
+		databaseHelper.updateLeader(id);
+		table.getModel().removeTableModelListener(this);
+		populateTable();
+		advance.populateLeader();
+		table.getModel().addTableModelListener(this);
+		}
 		float r = Float.valueOf(rate);
 		databaseHelper.updateleader(id, name, address, mobile,telephone,r);
 		
+	}
+	public void setAdvance(LeaderAdvance advances)
+	{
+		this.advance = advances;
 	}
 }

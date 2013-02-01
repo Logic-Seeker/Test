@@ -44,7 +44,9 @@ public class Customer extends JPanel {
 	private final JTextField txtMobileNo = new JTextField();
 	private final JTextField txtTelephoneNo = new JTextField();
 	private final JButton btnCreate = new JButton("Create");
-
+	CustomerRecords record = new CustomerRecords();
+	CustomerAdvance advance= new CustomerAdvance();
+	
 	/**
 	 * Create the panel.
 	 */
@@ -187,6 +189,8 @@ public class Customer extends JPanel {
 					JOptionPane.showMessageDialog(null,
 							"New Employee Added Successfully", "SUCCESS",
 							JOptionPane.DEFAULT_OPTION);
+					record.populateTable();
+					advance.populateCustomer();
 
 				}
 			}
@@ -221,6 +225,15 @@ public class Customer extends JPanel {
 		});
 
 		//panel_3.add(button);
+	}
+	
+	public void setrecords(CustomerRecords records)
+	{
+		this.record = records;
+	}
+	public void setAdvance(CustomerAdvance advances)
+	{
+		this.advance = advances;
 	}
 
 }

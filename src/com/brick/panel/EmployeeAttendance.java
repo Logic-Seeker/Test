@@ -89,6 +89,7 @@ public class EmployeeAttendance extends JPanel {
 		txtdate.setColumns(10);
 
 		initGUI();
+		populateAttendance();
 	}
 	private void initGUI() {
 		setLayout(new BorderLayout(0, 0));
@@ -125,17 +126,6 @@ public class EmployeeAttendance extends JPanel {
 		});
 		comboBoxEmployeeName.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(comboBoxEmployeeName, gbc_comboBoxEmployeeName);
-		ArrayList<EmployeeHelper> employeelist = new ArrayList<EmployeeHelper>();
-		employeelist = databasehelper.fetchEmployeeName();
-		comboBoxEmployeeName.setEditable(true);
-		comboBoxEmployeeName.setRenderer(new ComboBoxItemRenderer());
-		comboBoxEmployeeName.setEditor(new ComboBoxItemEditor());
-		model = new DefaultComboBoxModel();
-		comboBoxEmployeeName.setModel(model);
-		for (EmployeeHelper employeeHelper : employeelist) {
-			model.addElement(employeeHelper);
-			System.out.println(employeeHelper.name);
-		}
 		
 		GridBagConstraints gbc_lblDate = new GridBagConstraints();
 		gbc_lblDate.anchor = GridBagConstraints.WEST;
@@ -342,5 +332,19 @@ public class EmployeeAttendance extends JPanel {
 		scrollPane.setViewportView(table);
 		System.out.print("madishi her");
 
+	}
+	public void populateAttendance()
+	{
+	ArrayList<EmployeeHelper> employeelist = new ArrayList<EmployeeHelper>();
+	employeelist = databasehelper.fetchEmployeeName();
+	comboBoxEmployeeName.setEditable(true);
+	comboBoxEmployeeName.setRenderer(new ComboBoxItemRenderer());
+	comboBoxEmployeeName.setEditor(new ComboBoxItemEditor());
+	model = new DefaultComboBoxModel();
+	comboBoxEmployeeName.setModel(model);
+	for (EmployeeHelper employeeHelper : employeelist) {
+		model.addElement(employeeHelper);
+		System.out.println(employeeHelper.name);
+	}
 	}
 }

@@ -42,7 +42,9 @@ public class Employee extends JPanel {
 	private final JTextField txtSalary = new JTextField();
 	private final JButton btnCreate = new JButton("Add");
 	private JPanel panelAddEmployee;
-	EmployeeRecords record = new EmployeeRecords();
+	EmployeeRecords records = new EmployeeRecords();
+	EmployeeAdvance advance= new EmployeeAdvance();
+	EmployeeAttendance attendance = new EmployeeAttendance();
 
 	/**
 	 * Create the panel.
@@ -201,7 +203,10 @@ public class Employee extends JPanel {
 					JOptionPane.showMessageDialog(null,
 							"New Employee Added Successfully", "SUCCESS",
 							JOptionPane.DEFAULT_OPTION);
-					record.populateTable();
+					System.err.println("step 1");
+					records.populateTable();
+					advance.populateEmployeeAdvance();
+					attendance.populateAttendance();
 
 				}
 
@@ -240,8 +245,16 @@ public class Employee extends JPanel {
 		//panel_3.add(button);
 	}
 	
-	void set(EmployeeRecords records)
+	public void set(EmployeeRecords record)
 	{
-		this.record = records;
+		this.records = record;
+	}
+	public void setadvance(EmployeeAdvance advances)
+	{
+		this.advance = advances;
+	}
+	public void setattendance(EmployeeAttendance attendances)
+	{
+		this.attendance = attendances;
 	}
 }

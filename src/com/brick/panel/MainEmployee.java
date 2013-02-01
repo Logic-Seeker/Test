@@ -9,13 +9,13 @@ public class MainEmployee extends JPanel {
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 	private final JPanel panel = new JPanel();
 	private final JPanel panel_1 = new JPanel();
-	EmployeeRecords records = new EmployeeRecords();
 	private final JPanel panel_2 = new JPanel();
 	private final JPanel panel_3 = new JPanel();
 	Employee employee = new Employee();
-	EmployeeAttendance emoployeeattendance = new EmployeeAttendance();
+	EmployeeAttendance employeeattendance = new EmployeeAttendance();
 	private final JPanel panel_4 = new JPanel();
-	EmployeeRecords record = new EmployeeRecords();
+	EmployeeRecords records = new EmployeeRecords();
+	EmployeeAdvance advances = new EmployeeAdvance();
 	
 	/**
 	 * Create the panel.
@@ -23,11 +23,15 @@ public class MainEmployee extends JPanel {
 	public MainEmployee() {
 
 		initGUI();
+		employee.set(records);
+		employee.setadvance(advances);
+		employee.setattendance(employeeattendance);
+		records.setEmployeeAdvance(advances);
+		records.setattendance(employeeattendance);
 	}
 	private void initGUI() {
 		
-		employee.set(record);
-		record.setrecord(record);
+		
 		setLayout(new BorderLayout(0, 0));
 		
 		add(tabbedPane, BorderLayout.CENTER);
@@ -42,13 +46,13 @@ public class MainEmployee extends JPanel {
 		
 		tabbedPane.addTab("Employee Attendance", null, panel_2, null);
 		panel_2.setLayout(new BorderLayout(0, 0));
-		panel_2.add(emoployeeattendance);
+		panel_2.add(employeeattendance);
 		
 		tabbedPane.addTab("Employee Report", null, panel_3, null);
 		panel_3.setLayout(new BorderLayout(0, 0));
 		
 		tabbedPane.addTab("Advance", null, panel_4, null);
 		panel_4.setLayout(new BorderLayout(0, 0));
-		panel_4.add(new EmployeeAdvance());
+		panel_4.add(advances);
 	}
 }
