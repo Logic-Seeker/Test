@@ -1,6 +1,5 @@
 package com.brick.database;
 
-import java.awt.Dimension;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -28,7 +27,6 @@ import com.brick.helper.EmployeeHelper;
 import com.brick.helper.LaborHelper;
 import com.brick.helper.LeaderHelper;
 import com.brick.helper.VehicleInfo;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 public class DatabaseHelper {
 	private Connection connection = null;
