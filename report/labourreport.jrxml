@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="labourreport"  pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="l_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT L.NAME,L.TYPE,BD.BD_ID,BD.DISTANCE_TYPE,b.brick_type,SUM(LT.AMOUNT),LT.TRANSCATION_DATE
+FROM  labour L,labour_transcation LT,brick_distance BD,brick b
+where L.id=LT.L_ID AND LT.BD_ID=BD.BD_ID and BD.brick_id=b.brick_id and L.id=$P{l_id}
+GROUP BY LT.TRANSCATION_DATE,BD.BD_ID,b.brick_type,L.NAME,L.TYPE,BD.DISTANCE_TYPE]]>
+	</queryString>
+	<field name="NAME" class="java.lang.String"/>
+	<field name="TYPE" class="java.lang.String"/>
+	<field name="BD_ID" class="java.lang.Integer"/>
+	<field name="DISTANCE_TYPE" class="java.lang.String"/>
+	<field name="brick_type" class="java.lang.String"/>
+	<field name="SUM(LT.AMOUNT)" class="java.math.BigDecimal"/>
+	<field name="TRANSCATION_DATE" class="java.sql.Date"/>
+	<variable name="SUM(LT.AMOUNT)_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUM(LT.AMOUNT)}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<staticText>
+				<reportElement x="170" y="0" width="233" height="37"/>
+				<textElement>
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[BRICK INVENTORY]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement  x="87" y="0" width="402" height="35"/>
+				<textElement>
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[LABOUR  TRANSACTION REPORT]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="80" splitType="Stretch">
+			<rectangle>
+				<reportElement  x="0" y="57" width="555" height="20" backcolor="#CCCCFF"/>
+			</rectangle>
+			<staticText>
+				<reportElement  x="0" y="6" width="87" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="26" width="87" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ TYPE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="259" y="57" width="47" height="18"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Distance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="347" y="57" width="70" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Brick Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="444" y="57" width="100" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[AMOUNT]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="0" width="555" height="1"/>
+			</line>
+			<staticText>
+				<reportElement  x="154" y="57" width="87" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[B_distance]]></text>
+			</staticText>
+			<textField>
+				<reportElement  x="103" y="6" width="95" height="16"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="103" y="26" width="95" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{TYPE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="3" y="60" width="123" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement  x="347" y="0" width="70" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{brick_type}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="444" y="0" width="111" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{SUM(LT.AMOUNT)}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement  x="0" y="16" width="555" height="1"/>
+			</line>
+			<textField>
+				<reportElement  x="259" y="0" width="61" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{DISTANCE_TYPE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement  x="154" y="0" width="71" height="13"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{BD_ID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement  x="3" y="0" width="126" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{TRANSCATION_DATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="50">
+			<textField>
+				<reportElement  x="403" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement  x="489" y="0" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="50">
+			<textField>
+				<reportElement  x="444" y="13" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{SUM(LT.AMOUNT)_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="306" y="13" width="111" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

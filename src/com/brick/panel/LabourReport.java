@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
@@ -79,6 +81,7 @@ public class LabourReport extends JPanel {
 		gbc_btnGenerateReport.gridx = 7;
 		gbc_btnGenerateReport.gridy = 0;
 		panel_2.add(btnGenerateReport, gbc_btnGenerateReport);
+		btnGenerateReport.addActionListener(customActionListener);
 	}
 	public void populateLaborWork(){
 		ArrayList<LaborHelper> list = new ArrayList<LaborHelper>();
@@ -99,5 +102,15 @@ public class LabourReport extends JPanel {
 		}
 
 	}
+	private ActionListener customActionListener=new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(e.getSource()==btnGenerateReport){
+				databasehelper.generateReport("report/labourreport.jrxml");
+			}
+			
+		}
+	};
 
 }
