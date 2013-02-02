@@ -2,6 +2,7 @@ package com.brick.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,6 +28,7 @@ import com.brick.helper.EmployeeHelper;
 import com.brick.helper.LaborHelper;
 import com.brick.helper.LeaderHelper;
 import com.brick.helper.VehicleInfo;
+import com.mysql.jdbc.CallableStatement;
 
 public class DatabaseHelper {
 	private Connection connection = null;
@@ -1148,9 +1150,7 @@ public class DatabaseHelper {
 
 	}
 
-	public void generateReport(String reportPath) {
-
-		
+	public void generateReport(String reportPath,String id) {
 
 		try {
 			JasperReport jasperReport = JasperCompileManager
@@ -1170,5 +1170,47 @@ public class DatabaseHelper {
 			ex.printStackTrace();
 		}
 	}
+	public String getEngFromNepali(String date) throws SQLException {
+
+		String simpleProc = "{ call NEPALIDATE(?,?) }";
+		CallableStatement cs = (CallableStatement) connection
+				.prepareCall(simpleProc);
+		cs.registerOutParameter(2, java.sql.Types.VARCHAR);
+		cs.setString(1, "2068-09-01");
+		cs.execute();
+		String param1 = cs.getString("VENGDATE");
+		System.out.println("param1=" + param1);
+		ParameterMetaData pmeta = cs.getParameterMetaData();
+		if (pmeta == null) {
+			System.out.println("Vendor does not support ParameterMetaData");
+		} else {
+			System.out.println(pmeta.getParameterType(1));
+		}
+		//connection.close();
+
+		return "";
+
+	}
+	public String getNEPALIFROMENG(String date) throws SQLException {
+
+		String simpleProc = "{ call ENGTONEP(?,?) }";
+		CallableStatement cs = (CallableStatement) connection
+				.prepareCall(simpleProc);
+		cs.registerOutParameter(2, java.sql.Types.VARCHAR);
+		cs.setString(1, "2011-05-05");
+		cs.execute();
+		String param1 = cs.getString("VNEPDATE");
+		System.out.println("param1=" + param1);
+		ParameterMetaData pmeta = cs.getParameterMetaData();
+		if (pmeta == null) {
+			System.out.println("Vendor does not support ParameterMetaData");
+		} else {
+			System.out.println(pmeta.getParameterType(1));
+		}
+		//connection.close();
+
+		return "";
+
+	}  
 
 }

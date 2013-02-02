@@ -107,7 +107,7 @@ public class LabourReport extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource()==btnGenerateReport){
-				databasehelper.generateReport("report/labourreport.jrxml");
+				databasehelper.generateReport("report/labourreport.jrxml","193");
 			}
 			
 		}

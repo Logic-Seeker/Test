@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -79,6 +80,7 @@ public class LoginScreen extends JFrame {
 
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnLogin) {
+				
 				if (txtUser.getText() == null || txtUser.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Enter username",
 							"Missing field", JOptionPane.DEFAULT_OPTION);

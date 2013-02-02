@@ -10,7 +10,7 @@
 	<queryString>
 		<![CDATA[SELECT L.NAME,L.TYPE,BD.BD_ID,BD.DISTANCE_TYPE,b.brick_type,SUM(LT.AMOUNT),LT.TRANSCATION_DATE
 FROM  labour L,labour_transcation LT,brick_distance BD,brick b
-where L.id=LT.L_ID AND LT.BD_ID=BD.BD_ID and BD.brick_id=b.brick_id and L.id=$P{l_id}
+where L.id=LT.L_ID AND LT.BD_ID=BD.BD_ID and BD.brick_id=b.brick_id and L.id=193 
 GROUP BY LT.TRANSCATION_DATE,BD.BD_ID,b.brick_type,L.NAME,L.TYPE,BD.DISTANCE_TYPE]]>
 	</queryString>
 	<field name="NAME" class="java.lang.String"/>
