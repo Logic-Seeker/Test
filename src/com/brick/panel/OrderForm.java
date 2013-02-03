@@ -156,7 +156,7 @@ public class OrderForm extends JPanel {
 		panel_3.setBackground(Color.GRAY);
 		
 		panel_1.add(panel_3);
-		button.setIcon(new ImageIcon("/home/shobhab/Development/workspace/Inventory Management1.0/images/exit.png"));
+		
 		
 		panel_3.add(button);
 		button.addActionListener(new CustomActionListner());

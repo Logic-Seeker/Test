@@ -41,7 +41,7 @@ public class DatabaseHelper {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/brick_inventory", "root",
-					"admin");
+					"shresthas");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -348,7 +348,7 @@ public class DatabaseHelper {
 	public Object insertOrderDelivery(String voucher, int vehicle, int driver,
 			int brick, int half, int customer, String destination) {
 
-		String query = "insert into OrderDelivery(VoucherNo,vechile_id,E_id,brick_id,id,destination,HalfBrick) values('"
+		String query = "insert into OrderDelivery(VoucherNo,vechile_id,E_id,brick_id,id,destination,HalfBrick,u_id) values('"
 				+ voucher
 				+ "','"
 				+ vehicle
@@ -356,7 +356,7 @@ public class DatabaseHelper {
 				+ driver
 				+ "','"
 				+ brick
-				+ "','" + customer + "','" + destination + "','" + half + "');";
+				+ "','" + customer + "','" + destination + "','" + half + "','"+LoginScreen.id+"');";
 		Statement stmt = null;
 		String errorMessage = "";
 		int result = -1;
@@ -375,8 +375,14 @@ public class DatabaseHelper {
 		float realAmount = Float.valueOf(amount);
 		float realRate = Float.valueOf(rate);
 
-		String query = "insert into Coal(date,amount,rate) values('" + date
-				+ "','" + realAmount + "','" + realRate + "');";
+		String query = "insert into Coal(date,amount,rate,u_id) values('"
+				+ date
+				+ "','"
+				+ realAmount
+				+ "','"
+				+ realRate
+				+ "','"+LoginScreen.id+"');";
+
 		Statement stmt = null;
 		String errorMessage = "";
 		int result = -1;
@@ -396,8 +402,14 @@ public class DatabaseHelper {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String currentDate = dateFormat.format(date);
 
-		String query = "insert into LaborAdvance(l_id,amount,date) values('"
-				+ l_id + "','" + realAmount + "','" + currentDate + "');";
+		String query = "insert into LaborAdvance(l_id,amount,date,u_id) values('"
+				+ l_id
+				+ "','"
+				+ realAmount
+				+ "','"
+				+ currentDate
+				+ "','"+LoginScreen.id+"');";
+
 		Statement stmt = null;
 		String errorMessage = "";
 		int result = -1;
@@ -496,8 +508,14 @@ public class DatabaseHelper {
 	public Object insertLandEntry(String date, String amount, String purpose) {
 		float realAmount = Float.valueOf(amount);
 
-		String query = "insert into Land(date,amount,purpose) values('" + date
-				+ "','" + realAmount + "','" + purpose + "');";
+		String query = "insert into Land(date,amount,purpose,u_id) values('"
+				+ date
+				+ "','"
+				+ realAmount
+				+ "','"
+				+ purpose
+				+ "','"+LoginScreen.id+"');";
+
 		Statement stmt = null;
 		String errorMessage = "";
 		int result = -1;
@@ -946,21 +964,22 @@ public class DatabaseHelper {
 		}
 		return list;
 
-	}
+		}
+	
+	public int insertOrderEntry( int cust_id, String destination,
+			int noOfBrick, int halfBrick) {
+			String query = "insert into order_entry(customer_id,destination,no_of_brick,no_of_halfbrick,u_id) values('"
+			+ cust_id
+			+ "','"
+			+ destination
+			+ "','"
+			+ noOfBrick
+			+ "','"
+			+ halfBrick + "','"+LoginScreen.id+"');";
+			Statement stmt = null;
+			int result = -1;
+			try {
 
-	public int insertOrderEntry(int cust_id, String destination, int noOfBrick,
-			int halfBrick) {
-		String query = "insert into order_entry(customer_id,destination,no_of_brick,no_of_halfbrick ) values('"
-				+ cust_id
-				+ "','"
-				+ destination
-				+ "','"
-				+ noOfBrick
-				+ "','"
-				+ halfBrick + "');";
-		Statement stmt = null;
-		int result = -1;
-		try {
 			stmt = connection.createStatement();
 			result = stmt.executeUpdate(query);
 			return result;

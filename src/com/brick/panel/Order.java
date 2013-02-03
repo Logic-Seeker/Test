@@ -111,7 +111,7 @@ public class Order extends JPanel {
 		panel_3.setBackground(Color.GRAY);
 
 		panel.add(panel_3);
-		button.setIcon(new ImageIcon("images/exit.png"));
+		//button.setIcon(new ImageIcon("images/exit.png"));
 		button.addActionListener(new ActionListener() {
 
 			@Override
