@@ -45,6 +45,7 @@ public class Employee extends JPanel {
 	EmployeeRecords records = new EmployeeRecords();
 	EmployeeAdvance advance= new EmployeeAdvance();
 	EmployeeAttendance attendance = new EmployeeAttendance();
+	EmployeePayment payment = new EmployeePayment();
 
 	/**
 	 * Create the panel.
@@ -207,6 +208,7 @@ public class Employee extends JPanel {
 					records.populateTable();
 					advance.populateEmployeeAdvance();
 					attendance.populateAttendance();
+					payment.populateEmployeeAdvance();
 
 				}
 
@@ -256,5 +258,9 @@ public class Employee extends JPanel {
 	public void setattendance(EmployeeAttendance attendances)
 	{
 		this.attendance = attendances;
+	}
+	public void setpayment(EmployeePayment payments)
+	{
+		this.payment = payments;
 	}
 }

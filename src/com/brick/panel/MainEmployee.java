@@ -14,8 +14,10 @@ public class MainEmployee extends JPanel {
 	Employee employee = new Employee();
 	EmployeeAttendance employeeattendance = new EmployeeAttendance();
 	private final JPanel panel_4 = new JPanel();
+	private final JPanel panel_5 = new JPanel();
 	EmployeeRecords records = new EmployeeRecords();
 	EmployeeAdvance advances = new EmployeeAdvance();
+	EmployeePayment payment = new EmployeePayment();
 	
 	/**
 	 * Create the panel.
@@ -28,6 +30,7 @@ public class MainEmployee extends JPanel {
 		employee.setattendance(employeeattendance);
 		records.setEmployeeAdvance(advances);
 		records.setattendance(employeeattendance);
+		employee.setpayment(payment);
 	}
 	private void initGUI() {
 		
@@ -54,5 +57,9 @@ public class MainEmployee extends JPanel {
 		tabbedPane.addTab("Advance", null, panel_4, null);
 		panel_4.setLayout(new BorderLayout(0, 0));
 		panel_4.add(advances);
+		
+		tabbedPane.addTab("Payment", null, panel_5, null);
+		panel_5.setLayout(new BorderLayout(0, 0));
+		panel_5.add(payment);
 	}
 }
