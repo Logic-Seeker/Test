@@ -80,7 +80,7 @@ public class LoginScreen extends JFrame {
 
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnLogin) {
-				
+
 				if (txtUser.getText() == null || txtUser.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Enter username",
 							"Missing field", JOptionPane.DEFAULT_OPTION);
@@ -96,14 +96,13 @@ public class LoginScreen extends JFrame {
 				}
 				// login here
 				if (databaseHelper.checkValidLogin(
-						
-						txtUser.getText().toString(),txtPasswd.getText()
-								.toString())) {
-					id = databaseHelper.getid(txtUser.getText().toString(),txtPasswd.getText()
-							.toString());
+
+				txtUser.getText().toString(), txtPasswd.getText().toString())) {
+					id = databaseHelper.getid(txtUser.getText().toString(),
+							txtPasswd.getText().toString());
 					currentFrame.setVisible(false);
 					new MainWindow();
-					
+
 				} else {
 					JOptionPane.showMessageDialog(null, "InValid User", "lol",
 							JOptionPane.DEFAULT_OPTION);
