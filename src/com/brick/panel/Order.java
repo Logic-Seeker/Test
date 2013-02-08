@@ -45,26 +45,27 @@ public class Order extends JPanel {
 	private final JLabel lblDriverName = new JLabel("Driver Name");
 	private final JLabel lblBrickTypeA = new JLabel("Grade A Brick");
 	private final JLabel lblBrickTypeB = new JLabel("Grade B Brick");
-	private final JCheckBox chckbxHalf = new JCheckBox("Half");
+	private final JCheckBox chckbxHalf = new JCheckBox("Tukra-Tukri");
 	private final JTextField txtVoucherNo = new JTextField();
 	private final JTextField txtHalf = new JTextField();
 	private final JComboBox<VehicleInfo> comboBoxVehicleNo = new JComboBox<VehicleInfo>();
 	private final JComboBox<EmployeeHelper> comboBoxDriverName = new JComboBox<EmployeeHelper>();
-	private final JTextField comboBoxBrickType = new JTextField();
+	private final JTextField GradeA = new JTextField();
 	private final JLabel lblCustomerName = new JLabel("Customer Name");
 	private final JButton btnConfirmOrder = new JButton("Confirm Order");
 	private final JLabel lblOrderDelivery = new JLabel("Order Delivery");
-	private final JLabel lblTotal = new JLabel("Total");
-	private final JLabel lblBalance = new JLabel("Advance");
-	private final JLabel lblRemainder = new JLabel("Remainder");
-	private final JTextField txtTotal = new JTextField();
-	private final JTextField txtTotalB = new JTextField();
-	private final JTextField txtAdvance = new JTextField();
-	private final JTextField txtRemainder = new JTextField();
+	//private final JLabel lblTotal = new JLabel("Total");
+	//private final JLabel lblBalance = new JLabel("Advance");
+	//private final JLabel lblRemainder = new JLabel("Remainder");
+	//private final JTextField txtTotal = new JTextField();
+	private final JTextField GradeB = new JTextField();
+	//private final JTextField txtAdvance = new JTextField();
+	//private final JTextField txtRemainder = new JTextField();
 	DatabaseHelper databasehelper = new DatabaseHelper();
 	String numToken = "[\\p{Digit}]+";
 	private DefaultComboBoxModel model;
 	private JPanel panelOrder;
+	int e_id;
 
 	/**
 	 * Create the panel.
@@ -73,10 +74,7 @@ public class Order extends JPanel {
 		panelOrder = this;
 		model = new DefaultComboBoxModel<BrickHelper>();
 		txtDestination.setColumns(10);
-		txtRemainder.setColumns(10);
-		txtAdvance.setColumns(10);
-		txtTotal.setColumns(10);
-		txtTotalB.setColumns(9);
+		//txtTotalB.setColumns(9);
 		txtHalf.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -87,7 +85,7 @@ public class Order extends JPanel {
 		txtHalf.setColumns(10);
 		txtVoucherNo.setColumns(10);
 
-		txtAdvance.addCaretListener(onTxtAdvanceChangeListner);
+		//txtAdvance.addCaretListener(onTxtAdvanceChangeListner);
 
 		initGUI();
 	}
@@ -247,27 +245,28 @@ public class Order extends JPanel {
 			System.out.println(employeeHelper.name);
 		}
 
-		GridBagConstraints gbc_lblTotal = new GridBagConstraints();
+/*		GridBagConstraints gbc_lblTotal = new GridBagConstraints();
 		gbc_lblTotal.anchor = GridBagConstraints.WEST;
 		gbc_lblTotal.insets = new Insets(0, 0, 5, 5);
 		gbc_lblTotal.gridx = 3;
 		gbc_lblTotal.gridy = 2;
 		lblTotal.setFont(new Font("Dialog", Font.BOLD, 14));
-		panel_1.add(lblTotal, gbc_lblTotal);
+		panel_1.add(lblTotal, gbc_lblTotal);*/
 
-		GridBagConstraints gbc_txtTotal = new GridBagConstraints();
+		/*GridBagConstraints gbc_txtTotal = new GridBagConstraints();
 		gbc_txtTotal.insets = new Insets(7, 0, 7, 0);
 		gbc_txtTotal.fill = GridBagConstraints.BOTH;
 		gbc_txtTotal.gridx = 4;
 		gbc_txtTotal.gridy = 2;
-		panel_1.add(txtTotal, gbc_txtTotal);
+		panel_1.add(txtTotal, gbc_txtTotal);*/
 		
 		GridBagConstraints gbc_txtTotalB = new GridBagConstraints();
-		gbc_txtTotalB.insets = new Insets(7, 0, 7, 0);
+		gbc_txtTotalB.insets = new Insets(7, 0, 7, 4);
 		gbc_txtTotalB.fill = GridBagConstraints.BOTH;
 		gbc_txtTotalB.gridx = 1;
 		gbc_txtTotalB.gridy = 4;
-		panel_1.add(txtTotalB, gbc_txtTotalB);
+		GradeB.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel_1.add(GradeB, gbc_txtTotalB);
 
 		GridBagConstraints gbc_lblBrickType = new GridBagConstraints();
 		gbc_lblBrickType.anchor = GridBagConstraints.WEST;
@@ -290,26 +289,26 @@ public class Order extends JPanel {
 		gbc_comboBoxBrickType.fill = GridBagConstraints.BOTH;
 		gbc_comboBoxBrickType.gridx = 1;
 		gbc_comboBoxBrickType.gridy = 3;
-		comboBoxBrickType.setFont(new Font("Dialog", Font.BOLD, 14));
-		panel_1.add(comboBoxBrickType, gbc_comboBoxBrickType);
+		GradeA.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel_1.add(GradeA, gbc_comboBoxBrickType);
 		ArrayList<BrickHelper> bricklist = new ArrayList<BrickHelper>();
 		bricklist = databasehelper.fetchBrickName();
-		comboBoxBrickType.setEditable(true);
+		GradeA.setEditable(true);
 		
-		GridBagConstraints gbc_lblBalance = new GridBagConstraints();
+		/*GridBagConstraints gbc_lblBalance = new GridBagConstraints();
 		gbc_lblBalance.anchor = GridBagConstraints.WEST;
 		gbc_lblBalance.insets = new Insets(0, 0, 5, 5);
 		gbc_lblBalance.gridx = 3;
 		gbc_lblBalance.gridy = 3;
 		lblBalance.setFont(new Font("Dialog", Font.BOLD, 14));
-		panel_1.add(lblBalance, gbc_lblBalance);
+		panel_1.add(lblBalance, gbc_lblBalance);*/
 
-		GridBagConstraints gbc_txtAdvance = new GridBagConstraints();
+		/*GridBagConstraints gbc_txtAdvance = new GridBagConstraints();
 		gbc_txtAdvance.insets = new Insets(7, 0, 7, 0);
 		gbc_txtAdvance.fill = GridBagConstraints.BOTH;
 		gbc_txtAdvance.gridx = 4;
 		gbc_txtAdvance.gridy = 3;
-		panel_1.add(txtAdvance, gbc_txtAdvance);
+		panel_1.add(txtAdvance, gbc_txtAdvance);*/
 
 		GridBagConstraints gbc_chckbxHalf = new GridBagConstraints();
 		gbc_chckbxHalf.anchor = GridBagConstraints.WEST;
@@ -326,20 +325,20 @@ public class Order extends JPanel {
 		gbc_txtHalf.gridy = 5;
 		panel_1.add(txtHalf, gbc_txtHalf);
 
-		GridBagConstraints gbc_lblRemainder = new GridBagConstraints();
+/*		GridBagConstraints gbc_lblRemainder = new GridBagConstraints();
 		gbc_lblRemainder.anchor = GridBagConstraints.WEST;
 		gbc_lblRemainder.insets = new Insets(0, 0, 5, 5);
 		gbc_lblRemainder.gridx = 3;
 		gbc_lblRemainder.gridy = 4;
 		lblRemainder.setFont(new Font("Dialog", Font.BOLD, 14));
-		panel_1.add(lblRemainder, gbc_lblRemainder);
+		panel_1.add(lblRemainder, gbc_lblRemainder);*/
 
-		GridBagConstraints gbc_txtRemainder = new GridBagConstraints();
+		/*GridBagConstraints gbc_txtRemainder = new GridBagConstraints();
 		gbc_txtRemainder.insets = new Insets(7, 0, 7, 0);
 		gbc_txtRemainder.fill = GridBagConstraints.BOTH;
 		gbc_txtRemainder.gridx = 4;
 		gbc_txtRemainder.gridy = 4;
-		panel_1.add(txtRemainder, gbc_txtRemainder);
+		panel_1.add(txtRemainder, gbc_txtRemainder);*/
 
 		GridBagConstraints gbc_btnConfirmOrder = new GridBagConstraints();
 		gbc_btnConfirmOrder.anchor = GridBagConstraints.SOUTH;
@@ -375,12 +374,17 @@ public class Order extends JPanel {
 
 				int vehicle = ((VehicleInfo) comboBoxVehicleNo
 						.getSelectedItem()).vechileId;
+				System.err.println(comboBoxDriverName.getSelectedItem());
+				if(comboBoxDriverName.getSelectedItem()==null)
+				{
+				int	e_id=-1;
+				}
 				DatabaseHelper databasehelper = new DatabaseHelper();
 				Object[] t = (Object[]) (databasehelper.insertOrderDelivery(
 						txtVoucherNo.getText(),
-						((VehicleInfo) comboBoxVehicleNo.getSelectedItem()).vechileId,
-						((EmployeeHelper) comboBoxDriverName.getSelectedItem()).id,
-						Integer.valueOf(comboBoxBrickType.getText().trim().isEmpty()?"0":comboBoxBrickType.getText().trim()),
+						((VehicleInfo) comboBoxVehicleNo.getSelectedItem()).vechileId,e_id,
+						Integer.valueOf(GradeA.getText().trim().isEmpty()?"0":GradeA.getText().trim()),
+						Integer.valueOf(GradeB.getText().trim().isEmpty()?"0":GradeA.getText().trim()),
 						Integer.valueOf(txtHalf.getText().toString().equals("") ? "0"
 								: txtHalf.getText().toString()),
 						((CustomerHelper) comboBoxCustomer.getSelectedItem()).id,
@@ -402,7 +406,7 @@ public class Order extends JPanel {
 
 	}
 
-	private CaretListener onTxtAdvanceChangeListner = new CaretListener() {
+/*	private CaretListener onTxtAdvanceChangeListner = new CaretListener() {
 
 		@Override
 		public void caretUpdate(CaretEvent e) {
@@ -413,10 +417,26 @@ public class Order extends JPanel {
 			txtRemainder.setText(String.valueOf(remainder));
 
 		}
-	};
+	};*/
 
 	private final JComboBox<CustomerHelper> comboBoxCustomer = new JComboBox<CustomerHelper>();
 	private final JLabel lblDestination = new JLabel("Destination");
 	private final JTextField txtDestination = new JTextField();
+	
+	public void populateDriverName(){
+		ArrayList<EmployeeHelper> employeelist = new ArrayList<EmployeeHelper>();
+		employeelist = databasehelper.fetchDriverName();
+		comboBoxDriverName.setEditable(true);
+		comboBoxDriverName.setRenderer(new ComboBoxItemRenderer());
+		comboBoxDriverName.setEditor(new ComboBoxItemEditor());
+		model = new DefaultComboBoxModel();
+		comboBoxDriverName.setModel(model);
+		for (EmployeeHelper employeeHelper : employeelist) {
+			model.addElement(employeeHelper);
+			System.out.println(employeeHelper.name);
+		}
+		this.revalidate();
+		}
+	
 
 }

@@ -41,7 +41,7 @@ public class DatabaseHelper {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/brick_inventory", "root",
-					"admin");
+					"shresthas");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -146,26 +146,7 @@ public class DatabaseHelper {
 		return list;
 	}
 
-	public ArrayList<EmployeeHelper> fetchDriverName() {
-		ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
-		String query = "SELECT * From employee where E_Type='driver'";
-		System.out.println("check");
-		try {
-			pst = connection.prepareStatement(query);
-			rs = pst.executeQuery();
-			while (rs.next()) {
-				EmployeeHelper driverName = new EmployeeHelper();
-				driverName.id = rs.getInt("E_id");
-				driverName.name = rs.getString("E_Name");
-				list.add(driverName);
-			}
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}
-		return list;
-	}
-
+	
 	public ArrayList<EmployeeHelper> fetchEmployeeName() {
 		ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
 		String query = "SELECT * From employee where Remove='Delete'";
@@ -185,6 +166,27 @@ public class DatabaseHelper {
 		}
 		return list;
 	}
+	
+	public ArrayList<EmployeeHelper> fetchDriverName() {
+		ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
+		String query = "SELECT * From employee where Remove='Delete' and E_Type='driver'";
+		System.out.println("check");
+		try {
+			pst = connection.prepareStatement(query);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				EmployeeHelper driverName = new EmployeeHelper();
+				driverName.id = rs.getInt("E_id");
+				driverName.name = rs.getString("E_Name");
+				list.add(driverName);
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 
 	public ResultSet fetchEmployee() {
 		// ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
@@ -346,17 +348,17 @@ public class DatabaseHelper {
 	}
 
 	public Object insertOrderDelivery(String voucher, int vehicle, int driver,
-			int brick, int half, int customer, String destination) {
+			int gradeA,int gradeB, int half, int customer, String destination) {
 
-		String query = "insert into OrderDelivery(VoucherNo,vechile_id,E_id,brick_id,id,destination,HalfBrick,u_id) values('"
+		String query = "insert into OrderDelivery(VoucherNo,vechile_id,E_id,GradeA,GradeB,c_id,destination,HalfBrick,u_id) values('"
 				+ voucher
 				+ "','"
 				+ vehicle
 				+ "','"
 				+ driver
 				+ "','"
-				+ brick
-				+ "','" + customer + "','" + destination + "','" + half + "','"+LoginScreen.id+"');";
+				+ gradeA
+				+ "','"+gradeB+"','" + customer + "','" + destination + "','" + half + "','"+LoginScreen.id+"');";
 		Statement stmt = null;
 		String errorMessage = "";
 		int result = -1;
@@ -370,6 +372,30 @@ public class DatabaseHelper {
 		return new Object[] { result, errorMessage };
 
 	}
+	
+	public Object insertLocation(String name, int tripper, int truck) {
+
+		String query = "insert into  Destination(name,rateA,rateB) values('"
+				+ name
+				+ "','"
+				+ tripper
+				+ "','"
+				+ truck
+				+ "');";
+		Statement stmt = null;
+		String errorMessage = "";
+		int result = -1;
+		try {
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+			e.printStackTrace();
+		}
+		return new Object[] { result, errorMessage };
+
+	}
+
 
 	public Object insertCoal(String date, String amount, String rate) {
 		float realAmount = Float.valueOf(amount);
@@ -478,18 +504,16 @@ public class DatabaseHelper {
 
 	}
 
-	public Object insertemployeeadvance(int l_id, String amount, Date date) {
+	public Object insertemployeeadvance(int l_id, String amount, String date,String nepDate) {
 		int realAmount = Integer.valueOf(amount);
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String currentDate = dateFormat.format(date);
 
-		String query = "insert into EmployeeAdvance(e_id,amount,date,u_id) values('"
+		String query = "insert into EmployeeAdvance(e_id,amount,date,nep_date,u_id) values('"
 				+ l_id
 				+ "','"
 				+ realAmount
 				+ "','"
-				+ currentDate
-				+ "','"
+				+ date
+				+ "','"+nepDate+"','"
 				+ LoginScreen.id + "');";
 		Statement stmt = null;
 		String errorMessage = "";
@@ -967,14 +991,14 @@ public class DatabaseHelper {
 		}
 	
 	public int insertOrderEntry( int cust_id, String destination,
-			int noOfBrick, int halfBrick) {
-			String query = "insert into order_entry(customer_id,destination,no_of_brick,no_of_halfbrick,u_id) values('"
+			int gradeA,int gradeB, int halfBrick) {
+			String query = "insert into order_entry(customer_id,destination,gradeA,gradeB,no_of_halfbrick,u_id) values('"
 			+ cust_id
 			+ "','"
 			+ destination
 			+ "','"
-			+ noOfBrick
-			+ "','"
+			+ gradeA
+			+ "','"+gradeB+"','"
 			+ halfBrick + "','"+LoginScreen.id+"');";
 			Statement stmt = null;
 			int result = -1;
@@ -1210,26 +1234,35 @@ public class DatabaseHelper {
 		return "";
 
 	}
-	public String getNEPALIFROMENG(String date) throws SQLException {
+	public String getNEPALIFROMENG(String date) {
 
 		String simpleProc = "{ call ENGTONEP(?,?) }";
-		CallableStatement cs = (CallableStatement) connection
-				.prepareCall(simpleProc);
-		cs.registerOutParameter(2, java.sql.Types.VARCHAR);
-		cs.setString(1, "2011-05-05");
-		cs.execute();
-		String param1 = cs.getString("VNEPDATE");
-		System.out.println("param1=" + param1);
-		ParameterMetaData pmeta = cs.getParameterMetaData();
-		if (pmeta == null) {
-			System.out.println("Vendor does not support ParameterMetaData");
-		} else {
-			System.out.println(pmeta.getParameterType(1));
+		CallableStatement cs;
+		try {
+			cs = (CallableStatement) connection
+					.prepareCall(simpleProc);
+			cs.registerOutParameter(2, java.sql.Types.VARCHAR);
+			cs.setString(1, date);
+			cs.execute();
+			String param1 = cs.getString("VNEPDATE");
+			System.out.println("param1=" + param1);
+			ParameterMetaData pmeta = cs.getParameterMetaData();
+			if (pmeta == null) {
+				System.out.println("Vendor does not support ParameterMetaData");
+			} else {
+				System.out.println(pmeta.getParameterType(1));
+			}
+			return param1;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		//connection.close();
+				//connection.close();
 
 		return "";
 
 	}  
+	
 
 }

@@ -1,5 +1,6 @@
 package com.brick.panel;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -15,6 +16,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
 import com.brick.database.DatabaseHelper;
+import com.brick.helper.VehicleInfo;
 
 import java.awt.FlowLayout;
 import java.awt.Color;
@@ -27,10 +29,11 @@ public class NewVehicle extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final JLabel lblVehicleNumber = new JLabel("Vehicle Number");
-	private final JLabel lblVehicleDescription = new JLabel("Vehicle Description");
+	private final JLabel lblVehicleDescription = new JLabel("Vehicle Tpye");
 	private final JButton btnCancle = new JButton("Save");
 	private final JTextField txtVehicleNo = new JTextField();
-	private final JTextField txtVehicleDescription = new JTextField();
+	String[] comboBoxArray = {"Tripper","Truck"};
+	private final JComboBox txtVehicleDescription = new JComboBox(comboBoxArray);
 	private final JLabel lblVehicle = new JLabel("New Vehicle Information");
 	private final JPanel panel = new JPanel();
 	private final JPanel panel_1 = new JPanel();
@@ -84,7 +87,6 @@ public class NewVehicle extends JPanel {
 		gbc_txtVehicleDescription.gridy = 1;
 		txtVehicleDescription.setFont(new Font("Dialog", Font.PLAIN, 14));
 		panel.add(txtVehicleDescription, gbc_txtVehicleDescription);
-		txtVehicleDescription.setColumns(10);
 		GridBagConstraints gbc_btnCancle = new GridBagConstraints();
 		gbc_btnCancle.gridwidth = 2;
 		gbc_btnCancle.fill = GridBagConstraints.HORIZONTAL;
@@ -135,20 +137,21 @@ public class NewVehicle extends JPanel {
 					txtVehicleNo.requestFocus();
 					return;
 				}
-				if (txtVehicleDescription.getText() == null
+				/*if (txtVehicleDescription.getText() == null
 						|| txtVehicleDescription.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Enter vechile description",
 							"Missing field", JOptionPane.DEFAULT_OPTION);
 					txtVehicleNo.requestFocus();
 					return;
-				}
+				}*/
 				// login here
 				if (databaseHelper.addNewVechile(txtVehicleNo.getText()
-						.toString(), txtVehicleNo.getText().toString()) != -1) {
+						.toString(), txtVehicleDescription.getSelectedItem().toString()) != -1) {
 
 					JOptionPane.showMessageDialog(null,
 							"successfuly added new vechile", "",
 							JOptionPane.DEFAULT_OPTION);
+					txtVehicleNo.setText("");
 					
 
 				} else {

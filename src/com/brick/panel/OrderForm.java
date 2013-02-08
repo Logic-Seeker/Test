@@ -35,12 +35,14 @@ public class OrderForm extends JPanel {
 	private final JButton button = new JButton("");
 	private final JLabel lblOrder = new JLabel("Order");
 	private final JLabel lblCustomerName = new JLabel("Customer Name");
-	private final JLabel lblBrick = new JLabel("Brick");
+	private final JLabel lblBrick = new JLabel("GradeA");
+	private final JLabel lblBrickB = new JLabel("GradeB");
 	private final JCheckBox chckbxHalf = new JCheckBox("Half");
 	private final JLabel lblDestination = new JLabel("Destination");
 	private final JComboBox comboBoxCustomerName = new JComboBox();
 	private final JTextField txtDestination = new JTextField();
-	private final JTextField txtBrick = new JTextField();
+	private final JTextField txtBrickA = new JTextField();
+	private final JTextField txtBrickB = new JTextField();
 	private final JTextField txtHalf = new JTextField();
 	private final JButton btnOrder = new JButton("Order");
 	private JPanel panelOrderForm;
@@ -52,7 +54,8 @@ public class OrderForm extends JPanel {
 	 */
 	public OrderForm() {
 		txtHalf.setColumns(10);
-		txtBrick.setColumns(10);
+		txtBrickA.setColumns(10);
+		txtBrickB.setColumns(10);
 		txtDestination.setColumns(10);
 
 		initGUI();
@@ -63,7 +66,7 @@ public class OrderForm extends JPanel {
 		add(panel, BorderLayout.CENTER);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{165, 200};
-		gbl_panel.rowHeights = new int[]{45, 45, 45, 45, 80};
+		gbl_panel.rowHeights = new int[]{45, 45, 45, 45, 45, 80};
 		//gbl_panel.columnWidths = new int[]{0, 0, 0};
 		//gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
 		gbl_panel.columnWeights = new double[]{0.0, 0.0};
@@ -108,18 +111,35 @@ public class OrderForm extends JPanel {
 		lblBrick.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(lblBrick, gbc_lblBrick);
 		
+		GridBagConstraints gbc_lblBrickB = new GridBagConstraints();
+		gbc_lblBrick.anchor = GridBagConstraints.WEST;
+		gbc_lblBrick.insets = new Insets(0, 0, 5, 5);
+		gbc_lblBrick.gridx = 0;
+		gbc_lblBrick.gridy = 3;
+		lblBrickB.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel.add(lblBrickB, gbc_lblBrick);
+		
 		GridBagConstraints gbc_txtBrick = new GridBagConstraints();
 		gbc_txtBrick.insets = new Insets(7, 0, 7, 0);
 		gbc_txtBrick.fill = GridBagConstraints.BOTH;
 		gbc_txtBrick.gridx = 1;
 		gbc_txtBrick.gridy = 2;
-		panel.add(txtBrick, gbc_txtBrick);
+		txtBrickA.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel.add(txtBrickA, gbc_txtBrick);
+		
+		GridBagConstraints gbc_txtBrickB = new GridBagConstraints();
+		gbc_txtBrickB.insets = new Insets(7, 0, 7, 0);
+		gbc_txtBrickB.fill = GridBagConstraints.BOTH;
+		gbc_txtBrickB.gridx = 1;
+		gbc_txtBrickB.gridy = 3;
+		txtBrickB.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel.add(txtBrickB, gbc_txtBrickB);
 		
 		GridBagConstraints gbc_chckbxHalf = new GridBagConstraints();
 		gbc_chckbxHalf.anchor = GridBagConstraints.WEST;
 		gbc_chckbxHalf.insets = new Insets(0, 0, 5, 5);
 		gbc_chckbxHalf.gridx = 0;
-		gbc_chckbxHalf.gridy = 3;
+		gbc_chckbxHalf.gridy = 4;
 		chckbxHalf.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(chckbxHalf, gbc_chckbxHalf);
 		
@@ -127,7 +147,7 @@ public class OrderForm extends JPanel {
 		gbc_txtHalf.insets = new Insets(7, 0, 7, 0);
 		gbc_txtHalf.fill = GridBagConstraints.BOTH;
 		gbc_txtHalf.gridx = 1;
-		gbc_txtHalf.gridy = 3;
+		gbc_txtHalf.gridy = 4;
 		panel.add(txtHalf, gbc_txtHalf);
 		
 		GridBagConstraints gbc_btnOrder = new GridBagConstraints();
@@ -136,7 +156,7 @@ public class OrderForm extends JPanel {
 		gbc_btnOrder.anchor = GridBagConstraints.SOUTH;
 		gbc_btnOrder.insets = new Insets(0, 100, 0, 100);
 		gbc_btnOrder.gridx = 0;
-		gbc_btnOrder.gridy = 4;
+		gbc_btnOrder.gridy = 5;
 		btnOrder.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(btnOrder, gbc_btnOrder);
 		
@@ -194,20 +214,23 @@ public class OrderForm extends JPanel {
 					txtDestination.requestFocus();
 					return;
 				}
-				if (txtBrick.getText().toString().equals("")) {
+				if (txtBrickA.getText().toString().equals("")) {
 					JOptionPane.showMessageDialog(null, "Enter brick ",
 							"Missing field", JOptionPane.DEFAULT_OPTION);
-					txtBrick.requestFocus();
+					txtBrickA.requestFocus();
 					return;
 				}
 				int id = ((CustomerHelper) comboBoxCustomerName
 						.getSelectedItem()).id;
-				int no_of_brick = Integer.valueOf(txtBrick.getText());
+				int gradeA = Integer.valueOf(txtBrickA.getText().trim()
+						.equals("") ? "0" : txtBrickA.getText().toString());
+				int gradeB = Integer.valueOf(txtBrickB.getText().trim()
+						.equals("") ? "0" : txtBrickB.getText().toString());
 				int half_brick = Integer.valueOf(txtHalf.getText().trim()
 						.equals("") ? "0" : txtHalf.getText().toString());
 
 				int result = databaseHelper.insertOrderEntry(id, txtDestination
-						.getText().toString(), no_of_brick, half_brick);
+						.getText().toString(),gradeA,gradeB, half_brick);
 				if (result > 0) {
 
 					JOptionPane.showMessageDialog(null,
@@ -228,7 +251,7 @@ public class OrderForm extends JPanel {
 	}
 
 	public void resetField() {
-		txtBrick.setText("");
+		txtBrickA.setText("");
 		txtDestination.setText("");
 		txtHalf.setText("");
 	}

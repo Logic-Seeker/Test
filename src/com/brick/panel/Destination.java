@@ -1,38 +1,46 @@
 package com.brick.panel;
 
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
-import javax.swing.JTextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import com.brick.database.DatabaseHelper;
 
 public class Destination extends JPanel {
 	private final JPanel panel = new JPanel();
 	private final JPanel panel_1 = new JPanel();
 	private final JLabel lblNewDestination = new JLabel("Add New Destination");
 	private final JLabel lblDestination = new JLabel("Destination");
-	private final JLabel lblRate = new JLabel("Vehicle Type");
-	private final JTextField textField = new JTextField();
-	private final JTextField textField_1 = new JTextField();
-	private final JLabel lblRate_1 = new JLabel("Rate");
-	private final JTextField textField_2 = new JTextField();
+	private final JLabel lblRate = new JLabel("Tipper Rate");
+	private final JTextField name = new JTextField();
+	private final JTextField rateA = new JTextField();
+	private final JLabel lblRate_1 = new JLabel("Truck Rate");
+	private final JTextField rateB = new JTextField();
 	private final JButton btnNewButton = new JButton("Submit");
+	DatabaseHelper databaseHelper = new DatabaseHelper();
+	String numToken = "[\\p{Digit}]+";
 
 	/**
 	 * Create the panel.
 	 */
 	public Destination() {
-		textField_2.setFont(new Font("Dialog", Font.PLAIN, 14));
-		textField_2.setColumns(10);
-		textField_1.setFont(new Font("Dialog", Font.PLAIN, 14));
-		textField_1.setColumns(10);
-		textField.setFont(new Font("Dialog", Font.PLAIN, 14));
-		textField.setColumns(10);
+		rateB.setFont(new Font("Dialog", Font.PLAIN, 14));
+		rateB.setColumns(10);
+		rateA.setFont(new Font("Dialog", Font.PLAIN, 14));
+		rateA.setColumns(10);
+		name.setFont(new Font("Dialog", Font.PLAIN, 14));
+		name.setColumns(10);
 
 		initGUI();
 	}
@@ -62,7 +70,7 @@ public class Destination extends JPanel {
 		gbc_textField.fill = GridBagConstraints.BOTH;
 		gbc_textField.gridx = 1;
 		gbc_textField.gridy = 0;
-		panel.add(textField, gbc_textField);
+		panel.add(name, gbc_textField);
 		
 		GridBagConstraints gbc_lblRate = new GridBagConstraints();
 		gbc_lblRate.anchor = GridBagConstraints.WEST;
@@ -77,7 +85,7 @@ public class Destination extends JPanel {
 		gbc_textField_1.fill = GridBagConstraints.BOTH;
 		gbc_textField_1.gridx = 1;
 		gbc_textField_1.gridy = 1;
-		panel.add(textField_1, gbc_textField_1);
+		panel.add(rateA, gbc_textField_1);
 		
 		GridBagConstraints gbc_lblRate_1 = new GridBagConstraints();
 		gbc_lblRate_1.anchor = GridBagConstraints.WEST;
@@ -92,7 +100,7 @@ public class Destination extends JPanel {
 		gbc_textField_2.fill = GridBagConstraints.BOTH;
 		gbc_textField_2.gridx = 1;
 		gbc_textField_2.gridy = 2;
-		panel.add(textField_2, gbc_textField_2);
+		panel.add(rateB, gbc_textField_2);
 		
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.gridwidth = 2;
@@ -102,6 +110,42 @@ public class Destination extends JPanel {
 		btnNewButton.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(btnNewButton, gbc_btnNewButton);
 		panel_1.setBackground(Color.GRAY);
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				if(name.getText().trim().isEmpty())
+				{
+					JOptionPane.showMessageDialog(null,
+							"Please Enter The Location's Name", "Failed",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				if(rateA.getText().trim().isEmpty() 
+						||!rateA.getText().trim().matches(numToken))
+				{
+					JOptionPane.showMessageDialog(null,
+							"Please Enter The Rate for Tripper For This Loaction", "Failed",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				if(rateB.getText().trim().isEmpty() |!rateB	.getText().trim().matches(numToken))
+				{
+					JOptionPane.showMessageDialog(null,
+							"Please Enter The Rate for Truck For This Loaction", "Failed",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
+				databaseHelper.insertLocation(name.getText(),Integer.valueOf(rateA.getText().toString()), Integer.valueOf(rateB.getText().trim()));
+				JOptionPane.showMessageDialog(null,
+						"New Location Entered", "Success",
+						JOptionPane.INFORMATION_MESSAGE);
+				name.setText("");
+				rateA.setText("");
+				rateB.setText("");
+				
+			}
+		});
 		
 		add(panel_1, BorderLayout.NORTH);
 		lblNewDestination.setFont(new Font("Dialog", Font.BOLD, 16));
