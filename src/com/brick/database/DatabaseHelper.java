@@ -23,6 +23,7 @@ import net.sf.jasperreports.swing.JRViewer;
 
 import com.brick.frame.LoginScreen;
 import com.brick.helper.BrickHelper;
+import com.brick.helper.BrickUtils;
 import com.brick.helper.CustomerHelper;
 import com.brick.helper.EmployeeHelper;
 import com.brick.helper.LaborHelper;
@@ -146,7 +147,6 @@ public class DatabaseHelper {
 		return list;
 	}
 
-	
 	public ArrayList<EmployeeHelper> fetchEmployeeName() {
 		ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
 		String query = "SELECT * From employee where Remove='Delete'";
@@ -166,7 +166,7 @@ public class DatabaseHelper {
 		}
 		return list;
 	}
-	
+
 	public ArrayList<EmployeeHelper> fetchDriverName() {
 		ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
 		String query = "SELECT * From employee where Remove='Delete' and E_Type='driver'";
@@ -186,7 +186,6 @@ public class DatabaseHelper {
 		}
 		return list;
 	}
-
 
 	public ResultSet fetchEmployee() {
 		// ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
@@ -348,7 +347,7 @@ public class DatabaseHelper {
 	}
 
 	public Object insertOrderDelivery(String voucher, int vehicle, int driver,
-			int gradeA,int gradeB, int half, int customer, String destination) {
+			int gradeA, int gradeB, int half, int customer, String destination) {
 
 		String query = "insert into OrderDelivery(VoucherNo,vechile_id,E_id,GradeA,GradeB,c_id,destination,HalfBrick,u_id) values('"
 				+ voucher
@@ -358,7 +357,13 @@ public class DatabaseHelper {
 				+ driver
 				+ "','"
 				+ gradeA
-				+ "','"+gradeB+"','" + customer + "','" + destination + "','" + half + "','"+LoginScreen.id+"');";
+				+ "','"
+				+ gradeB
+				+ "','"
+				+ customer
+				+ "','"
+				+ destination
+				+ "','" + half + "','" + LoginScreen.id + "');";
 		Statement stmt = null;
 		String errorMessage = "";
 		int result = -1;
@@ -372,16 +377,11 @@ public class DatabaseHelper {
 		return new Object[] { result, errorMessage };
 
 	}
-	
+
 	public Object insertLocation(String name, int tripper, int truck) {
 
 		String query = "insert into  Destination(name,rateA,rateB) values('"
-				+ name
-				+ "','"
-				+ tripper
-				+ "','"
-				+ truck
-				+ "');";
+				+ name + "','" + tripper + "','" + truck + "');";
 		Statement stmt = null;
 		String errorMessage = "";
 		int result = -1;
@@ -395,19 +395,14 @@ public class DatabaseHelper {
 		return new Object[] { result, errorMessage };
 
 	}
-
 
 	public Object insertCoal(String date, String amount, String rate) {
 		float realAmount = Float.valueOf(amount);
 		float realRate = Float.valueOf(rate);
 
 		String query = "insert into Coal(date,amount,rate,u_id) values('"
-				+ date
-				+ "','"
-				+ realAmount
-				+ "','"
-				+ realRate
-				+ "','"+LoginScreen.id+"');";
+				+ date + "','" + realAmount + "','" + realRate + "','"
+				+ LoginScreen.id + "');";
 
 		Statement stmt = null;
 		String errorMessage = "";
@@ -434,7 +429,8 @@ public class DatabaseHelper {
 				+ realAmount
 				+ "','"
 				+ currentDate
-				+ "','"+LoginScreen.id+"');";
+				+ "','"
+				+ LoginScreen.id + "');";
 
 		Statement stmt = null;
 		String errorMessage = "";
@@ -504,7 +500,8 @@ public class DatabaseHelper {
 
 	}
 
-	public Object insertemployeeadvance(int l_id, String amount, String date,String nepDate) {
+	public Object insertemployeeadvance(int l_id, String amount, String date,
+			String nepDate) {
 		int realAmount = Integer.valueOf(amount);
 
 		String query = "insert into EmployeeAdvance(e_id,amount,date,nep_date,u_id) values('"
@@ -513,8 +510,9 @@ public class DatabaseHelper {
 				+ realAmount
 				+ "','"
 				+ date
-				+ "','"+nepDate+"','"
-				+ LoginScreen.id + "');";
+				+ "','"
+				+ nepDate
+				+ "','" + LoginScreen.id + "');";
 		Statement stmt = null;
 		String errorMessage = "";
 		int result = -1;
@@ -533,12 +531,8 @@ public class DatabaseHelper {
 		float realAmount = Float.valueOf(amount);
 
 		String query = "insert into Land(date,amount,purpose,u_id) values('"
-				+ date
-				+ "','"
-				+ realAmount
-				+ "','"
-				+ purpose
-				+ "','"+LoginScreen.id+"');";
+				+ date + "','" + realAmount + "','" + purpose + "','"
+				+ LoginScreen.id + "');";
 
 		Statement stmt = null;
 		String errorMessage = "";
@@ -921,18 +915,24 @@ public class DatabaseHelper {
 
 	public int insertabsent(int e_id, Date date, int absent, int leave,
 			String reason) {
-		System.err.println(date);
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String currentDate = dateFormat.format(date);
+
+		String currentDate = BrickUtils.getCurrentDate();
 		String query = "insert into attendance(`E_id`,`Date`,`Absent`,`Leaves`,`Reason`,`u_id`) values('"
 				+ e_id
 				+ "','"
 				+ currentDate
 				+ "','"
+				+ "','"
+				+ getNEPALIFROMENG(currentDate)
+				+ "','"
+
 				+ absent
 				+ "','"
 				+ leave
-				+ "','" + reason + "','" + LoginScreen.id + "');";
+				+ "','"
+				+ reason
+				+ "','"
+				+ LoginScreen.id + "');";
 		int result = -1;
 		Statement stmt = null;
 		try {
@@ -988,21 +988,21 @@ public class DatabaseHelper {
 		}
 		return list;
 
-		}
-	
-	public int insertOrderEntry( int cust_id, String destination,
-			int gradeA,int gradeB, int halfBrick) {
-			String query = "insert into order_entry(customer_id,destination,gradeA,gradeB,no_of_halfbrick,u_id) values('"
-			+ cust_id
-			+ "','"
-			+ destination
-			+ "','"
-			+ gradeA
-			+ "','"+gradeB+"','"
-			+ halfBrick + "','"+LoginScreen.id+"');";
-			Statement stmt = null;
-			int result = -1;
-			try {
+	}
+
+	public int insertOrderEntry(int cust_id, String destination, int gradeA,
+			int gradeB, int halfBrick) {
+		String query = "insert into order_entry(customer_id,destination,gradeA,gradeB,no_of_halfbrick,u_id) values('"
+				+ cust_id
+				+ "','"
+				+ destination
+				+ "','"
+				+ gradeA
+				+ "','"
+				+ gradeB + "','" + halfBrick + "','" + LoginScreen.id + "');";
+		Statement stmt = null;
+		int result = -1;
+		try {
 
 			stmt = connection.createStatement();
 			result = stmt.executeUpdate(query);
@@ -1193,7 +1193,7 @@ public class DatabaseHelper {
 
 	}
 
-	public void generateReport(String reportPath,String id) {
+	public void generateReport(String reportPath, String id) {
 
 		try {
 			JasperReport jasperReport = JasperCompileManager
@@ -1213,6 +1213,7 @@ public class DatabaseHelper {
 			ex.printStackTrace();
 		}
 	}
+
 	public String getEngFromNepali(String date) throws SQLException {
 
 		String simpleProc = "{ call NEPALIDATE(?,?) }";
@@ -1229,18 +1230,18 @@ public class DatabaseHelper {
 		} else {
 			System.out.println(pmeta.getParameterType(1));
 		}
-		//connection.close();
+		// connection.close();
 
 		return "";
 
 	}
+
 	public String getNEPALIFROMENG(String date) {
 
 		String simpleProc = "{ call ENGTONEP(?,?) }";
 		CallableStatement cs;
 		try {
-			cs = (CallableStatement) connection
-					.prepareCall(simpleProc);
+			cs = (CallableStatement) connection.prepareCall(simpleProc);
 			cs.registerOutParameter(2, java.sql.Types.VARCHAR);
 			cs.setString(1, date);
 			cs.execute();
@@ -1258,35 +1259,32 @@ public class DatabaseHelper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-				//connection.close();
+		// connection.close();
 
 		return "";
 
-	}  
-	
-	public int insertPayment(int empId,String amount,String english_date){
-		String nepalidate=getNEPALIFROMENG(english_date);
+	}
+
+	public int insertPayment(int empId, String amount, String english_date) {
+		String nepalidate = getNEPALIFROMENG(english_date);
 		String query = "insert into employee_payment(emp_id,amount,eng_date,nep_date,userId) values('"
-			+ empId
-			+ "','"
-			+ amount
-			+ "','"
-			+ english_date
-			+ "','"
-			+ nepalidate
-			+ "','"
-			 + LoginScreen.id + "');";
-	Statement stmt = null;
-	int result = -1;
-	try {
-		stmt = connection.createStatement();
-		result = stmt.executeUpdate(query);
+				+ empId
+				+ "','"
+				+ amount
+				+ "','"
+				+ english_date
+				+ "','"
+				+ nepalidate + "','" + LoginScreen.id + "');";
+		Statement stmt = null;
+		int result = -1;
+		try {
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return result;
-	} catch (Exception e) {
-		e.printStackTrace();
 	}
-	return result;
-	}
-	
 
 }
