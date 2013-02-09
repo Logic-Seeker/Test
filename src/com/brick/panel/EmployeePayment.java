@@ -153,6 +153,15 @@ public class EmployeePayment extends JPanel {
 					textField_1.requestFocus();
 					return;
 				}
+				if (databasehelper.insertPayment(((EmployeeHelper) comboBox
+						.getSelectedItem()).id, textField.getText().toString(),
+						textField_1.getText().toString()) > 0) {
+					JOptionPane.showMessageDialog(null, "Sucessfully added Record",
+							"error", JOptionPane.DEFAULT_OPTION);
+				}else{
+					JOptionPane.showMessageDialog(null, "Error in database",
+							"error", JOptionPane.DEFAULT_OPTION);
+				}
 
 			}
 		});

@@ -41,7 +41,7 @@ public class DatabaseHelper {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/brick_inventory", "root",
-					"shresthas");
+					"admin");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -1263,6 +1263,30 @@ public class DatabaseHelper {
 		return "";
 
 	}  
+	
+	public int insertPayment(int empId,String amount,String english_date){
+		String nepalidate=getNEPALIFROMENG(english_date);
+		String query = "insert into employee_payment(emp_id,amount,eng_date,nep_date,userId) values('"
+			+ empId
+			+ "','"
+			+ amount
+			+ "','"
+			+ english_date
+			+ "','"
+			+ nepalidate
+			+ "','"
+			 + LoginScreen.id + "');";
+	Statement stmt = null;
+	int result = -1;
+	try {
+		stmt = connection.createStatement();
+		result = stmt.executeUpdate(query);
+		return result;
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	return result;
+	}
 	
 
 }
