@@ -11,6 +11,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JFrame;
 
@@ -1193,14 +1195,15 @@ public class DatabaseHelper {
 
 	}
 
-	public void generateReport(String reportPath, String id) {
-
+	public void generateReport(String reportPath, int id) {
+		Map parametersMap = new HashMap();
+		parametersMap.put("l_id", id);
 		try {
 			JasperReport jasperReport = JasperCompileManager
 					.compileReport(reportPath);
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(
-					jasperReport, null, connection);
+					jasperReport, parametersMap, connection);
 			JRViewer jv = new JRViewer(jasperPrint);
 
 			JFrame jf = new JFrame();
