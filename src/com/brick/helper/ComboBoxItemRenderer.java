@@ -65,6 +65,10 @@ public class ComboBoxItemRenderer extends JPanel implements ListCellRenderer {
 			LeaderHelper tt = (LeaderHelper) value;
 			setText(tt.name, isSelected);
 
+		}else if (value instanceof DestinationHelper) {
+			DestinationHelper tt = (DestinationHelper) value;
+			setText(tt.name, isSelected);
+
 		}
 
 		// Custom countryItem = (Custom) value;

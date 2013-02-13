@@ -26,13 +26,13 @@ import com.brick.database.DatabaseHelper;
 import com.brick.helper.ComboBoxItemEditor;
 import com.brick.helper.ComboBoxItemRenderer;
 import com.brick.helper.CustomerHelper;
+import com.brick.helper.DestinationHelper;
 
 public class OrderForm extends JPanel {
 	private final JPanel panel = new JPanel();
 	private final JPanel panel_1 = new JPanel();
 	private final JPanel panel_2 = new JPanel();
 	private final JPanel panel_3 = new JPanel();
-	private final JButton button = new JButton("");
 	private final JLabel lblOrder = new JLabel("Order");
 	private final JLabel lblCustomerName = new JLabel("Customer Name");
 	private final JLabel lblBrick = new JLabel("GradeA");
@@ -40,7 +40,7 @@ public class OrderForm extends JPanel {
 	private final JCheckBox chckbxHalf = new JCheckBox("Half");
 	private final JLabel lblDestination = new JLabel("Destination");
 	private final JComboBox comboBoxCustomerName = new JComboBox();
-	private final JTextField txtDestination = new JTextField();
+	private final JComboBox<DestinationHelper> txtDestination = new JComboBox<DestinationHelper>();
 	private final JTextField txtBrickA = new JTextField();
 	private final JTextField txtBrickB = new JTextField();
 	private final JTextField txtHalf = new JTextField();
@@ -56,9 +56,9 @@ public class OrderForm extends JPanel {
 		txtHalf.setColumns(10);
 		txtBrickA.setColumns(10);
 		txtBrickB.setColumns(10);
-		txtDestination.setColumns(10);
-
+		
 		initGUI();
+		populateDestination();
 	}
 	private void initGUI() {
 		setLayout(new BorderLayout(0, 0));
@@ -178,8 +178,7 @@ public class OrderForm extends JPanel {
 		panel_1.add(panel_3);
 		
 		
-		panel_3.add(button);
-		button.addActionListener(new CustomActionListner());
+		
 		btnOrder.addActionListener(new CustomActionListner());
 
 		comboBoxCustomerName.setEditable(true);
@@ -208,12 +207,7 @@ public class OrderForm extends JPanel {
 					comboBoxCustomerName.requestFocus();
 					return;
 				}
-				if (txtDestination.getText().toString().trim().equals("")) {
-					JOptionPane.showMessageDialog(null, "Enter description",
-							"Missing field", JOptionPane.DEFAULT_OPTION);
-					txtDestination.requestFocus();
-					return;
-				}
+				
 				if (txtBrickA.getText().toString().equals("")) {
 					JOptionPane.showMessageDialog(null, "Enter brick ",
 							"Missing field", JOptionPane.DEFAULT_OPTION);
@@ -229,8 +223,8 @@ public class OrderForm extends JPanel {
 				int half_brick = Integer.valueOf(txtHalf.getText().trim()
 						.equals("") ? "0" : txtHalf.getText().toString());
 
-				int result = databaseHelper.insertOrderEntry(id, txtDestination
-						.getText().toString(),gradeA,gradeB, half_brick);
+				int result = databaseHelper.insertOrderEntry(id, ((DestinationHelper) txtDestination
+						.getSelectedItem()).id,gradeA,gradeB, half_brick);
 				if (result > 0) {
 
 					JOptionPane.showMessageDialog(null,
@@ -244,15 +238,34 @@ public class OrderForm extends JPanel {
 							JOptionPane.DEFAULT_OPTION);
 				}
 
-			} else if (e.getSource() == button) {
-				panelOrderForm.setVisible(false);
-			}
+			} 
 		}
 	}
 
 	public void resetField() {
 		txtBrickA.setText("");
-		txtDestination.setText("");
 		txtHalf.setText("");
 	}
+	
+	public void populateDestination(){
+		ArrayList<DestinationHelper> list = new ArrayList<DestinationHelper>();
+		list = databaseHelper.fetchDestination();
+		txtDestination.setEditable(true);
+		txtDestination.setRenderer(new ComboBoxItemRenderer());
+		txtDestination.setEditor(new ComboBoxItemEditor());
+		model=new DefaultComboBoxModel();
+		txtDestination.setModel(model);
+		
+		if (list.isEmpty())
+		{
+			model.addElement(new CustomerHelper());
+		}
+		for (DestinationHelper destinationHelper : list) {
+
+			model.addElement(destinationHelper);
+		}
+
+		txtDestination.setEditable(true);
+	}
+
 }

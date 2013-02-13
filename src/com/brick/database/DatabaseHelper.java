@@ -16,6 +16,8 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 
+import sun.security.krb5.internal.crypto.Des;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -27,6 +29,7 @@ import com.brick.frame.LoginScreen;
 import com.brick.helper.BrickHelper;
 import com.brick.helper.BrickUtils;
 import com.brick.helper.CustomerHelper;
+import com.brick.helper.DestinationHelper;
 import com.brick.helper.EmployeeHelper;
 import com.brick.helper.LaborHelper;
 import com.brick.helper.LeaderHelper;
@@ -149,6 +152,26 @@ public class DatabaseHelper {
 		return list;
 	}
 
+	public ArrayList<DestinationHelper> fetchDestination() {
+		ArrayList<DestinationHelper> list = new ArrayList<DestinationHelper>();
+		String query = "SELECT * From Destination where Remove='Delete'";
+		try {
+			pst = connection.prepareStatement(query);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				DestinationHelper destination = new DestinationHelper();
+				destination.id = rs.getInt("id");
+				destination.name = rs.getString("name");
+				list.add(destination);
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	
 	public ArrayList<EmployeeHelper> fetchEmployeeName() {
 		ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
 		String query = "SELECT * From employee where Remove='Delete'";
@@ -322,7 +345,7 @@ public class DatabaseHelper {
 
 	public ResultSet fetchorder() throws SQLException {
 
-		String query = "SELECT C.name,OE.destination,OE.no_of_brick,OE.no_of_halfbrick from order_entry OE,customer C where OE.customer_id=C.id;";
+		String query = "SELECT C.name,OE.d_id,OE.GradeA,OE.no_of_halfbrick from order_entry OE,customer C where OE.customer_id=C.id;";
 		Statement stmt = null;
 		String errorMessage = "";
 		// int result = -1;
@@ -349,9 +372,9 @@ public class DatabaseHelper {
 	}
 
 	public Object insertOrderDelivery(String voucher, int vehicle, int driver,
-			int gradeA, int gradeB, int half, int customer, String destination) {
+		int gradeA,int gradeB, int half, int customer, int destination) {
 
-		String query = "insert into OrderDelivery(VoucherNo,vechile_id,E_id,GradeA,GradeB,c_id,destination,HalfBrick,u_id) values('"
+		String query = "insert into OrderDelivery(VoucherNo,vechile_id,E_id,GradeA,GradeB,c_id,d_id,HalfBrick,u_id) values('"
 				+ voucher
 				+ "','"
 				+ vehicle
@@ -991,21 +1014,20 @@ public class DatabaseHelper {
 		return list;
 
 	}
-
-	public int insertOrderEntry(int cust_id, String destination, int gradeA,
-			int gradeB, int halfBrick) {
-		String query = "insert into order_entry(customer_id,destination,gradeA,gradeB,no_of_halfbrick,u_id) values('"
-				+ cust_id
-				+ "','"
-				+ destination
-				+ "','"
-				+ gradeA
-				+ "','"
-				+ gradeB + "','" + halfBrick + "','" + LoginScreen.id + "');";
-		Statement stmt = null;
-		int result = -1;
-		try {
-
+	
+	public int insertOrderEntry( int cust_id, int destination,
+			int gradeA,int gradeB, int halfBrick) {
+			String query = "insert into order_entry(customer_id,d_id,gradeA,gradeB,no_of_halfbrick,u_id) values('"
+			+ cust_id
+			+ "','"
+			+ destination
+			+ "','"
+			+ gradeA
+			+ "','"+gradeB+"','"
+			+ halfBrick + "','"+LoginScreen.id+"');";
+			Statement stmt = null;
+			int result = -1;
+			try {
 			stmt = connection.createStatement();
 			result = stmt.executeUpdate(query);
 			return result;
@@ -1217,21 +1239,28 @@ public class DatabaseHelper {
 		}
 	}
 
-	public String getEngFromNepali(String date) throws SQLException {
+	public String getEngFromNepali(String date)  {
 
 		String simpleProc = "{ call NEPALIDATE(?,?) }";
-		CallableStatement cs = (CallableStatement) connection
-				.prepareCall(simpleProc);
-		cs.registerOutParameter(2, java.sql.Types.VARCHAR);
-		cs.setString(1, "2068-09-01");
-		cs.execute();
-		String param1 = cs.getString("VENGDATE");
-		System.out.println("param1=" + param1);
-		ParameterMetaData pmeta = cs.getParameterMetaData();
-		if (pmeta == null) {
-			System.out.println("Vendor does not support ParameterMetaData");
-		} else {
-			System.out.println(pmeta.getParameterType(1));
+		CallableStatement cs;
+		try {
+			cs = (CallableStatement) connection
+					.prepareCall(simpleProc);
+			cs.registerOutParameter(2, java.sql.Types.VARCHAR);
+			cs.setString(1, date);
+			cs.execute();
+			String param1 = cs.getString("VENGDATE");
+			System.out.println("param1=" + param1);
+			ParameterMetaData pmeta = cs.getParameterMetaData();
+			if (pmeta == null) {
+				System.out.println("Vendor does not support ParameterMetaData");
+			} else {
+				System.out.println(pmeta.getParameterType(1));
+			}
+			return param1;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		// connection.close();
 

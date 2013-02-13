@@ -31,6 +31,7 @@ import com.brick.helper.BrickHelper;
 import com.brick.helper.ComboBoxItemEditor;
 import com.brick.helper.ComboBoxItemRenderer;
 import com.brick.helper.CustomerHelper;
+import com.brick.helper.DestinationHelper;
 import com.brick.helper.EmployeeHelper;
 import com.brick.helper.VehicleInfo;
 
@@ -39,7 +40,6 @@ public class Order extends JPanel {
 	private final JPanel panel_1 = new JPanel();
 	private final JPanel panel_2 = new JPanel();
 	private final JPanel panel_3 = new JPanel();
-	private final JButton button = new JButton("");
 	private final JLabel lblVoucher = new JLabel("Voucher No\n");
 	private final JLabel lblVehicleNo = new JLabel("Vehicle No");
 	private final JLabel lblDriverName = new JLabel("Driver Name");
@@ -54,6 +54,10 @@ public class Order extends JPanel {
 	private final JLabel lblCustomerName = new JLabel("Customer Name");
 	private final JButton btnConfirmOrder = new JButton("Confirm Order");
 	private final JLabel lblOrderDelivery = new JLabel("Order Delivery");
+	private final JComboBox<CustomerHelper> comboBoxCustomer = new JComboBox<CustomerHelper>();
+	private final JLabel lblDestination = new JLabel("Destination");
+	private final JComboBox<DestinationHelper> txtDestination = new JComboBox<DestinationHelper>();
+	
 	//private final JLabel lblTotal = new JLabel("Total");
 	//private final JLabel lblBalance = new JLabel("Advance");
 	//private final JLabel lblRemainder = new JLabel("Remainder");
@@ -73,7 +77,6 @@ public class Order extends JPanel {
 	public Order() {
 		panelOrder = this;
 		model = new DefaultComboBoxModel<BrickHelper>();
-		txtDestination.setColumns(10);
 		//txtTotalB.setColumns(9);
 		txtHalf.addKeyListener(new KeyAdapter() {
 			@Override
@@ -88,6 +91,7 @@ public class Order extends JPanel {
 		//txtAdvance.addCaretListener(onTxtAdvanceChangeListner);
 
 		initGUI();
+		populateDestination();
 	}
 
 	private void initGUI() {
@@ -110,16 +114,7 @@ public class Order extends JPanel {
 
 		panel.add(panel_3);
 		//button.setIcon(new ImageIcon("images/exit.png"));
-		button.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				panelOrder.setVisible(false);
-			}
-		});
-
-		panel_3.add(button);
-
+		
 		add(panel_1, BorderLayout.CENTER);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[] { 135, 160, 0, 140, 160 };
@@ -388,7 +383,7 @@ public class Order extends JPanel {
 						Integer.valueOf(txtHalf.getText().toString().equals("") ? "0"
 								: txtHalf.getText().toString()),
 						((CustomerHelper) comboBoxCustomer.getSelectedItem()).id,
-						txtDestination.getText()));
+						((DestinationHelper) txtDestination.getSelectedItem()).id));
 				if (Integer.valueOf(t[0].toString()) == 1) {
 					JOptionPane.showMessageDialog(null, "Successfully Added",
 							"Success", JOptionPane.DEFAULT_OPTION);
@@ -419,9 +414,6 @@ public class Order extends JPanel {
 		}
 	};*/
 
-	private final JComboBox<CustomerHelper> comboBoxCustomer = new JComboBox<CustomerHelper>();
-	private final JLabel lblDestination = new JLabel("Destination");
-	private final JTextField txtDestination = new JTextField();
 	
 	public void populateDriverName(){
 		ArrayList<EmployeeHelper> employeelist = new ArrayList<EmployeeHelper>();
@@ -437,6 +429,26 @@ public class Order extends JPanel {
 		}
 		this.revalidate();
 		}
+	public void populateDestination(){
+		ArrayList<DestinationHelper> list = new ArrayList<DestinationHelper>();
+		list = databasehelper.fetchDestination();
+		txtDestination.setEditable(true);
+		txtDestination.setRenderer(new ComboBoxItemRenderer());
+		txtDestination.setEditor(new ComboBoxItemEditor());
+		model=new DefaultComboBoxModel();
+		txtDestination.setModel(model);
+		
+		if (list.isEmpty())
+		{
+			model.addElement(new CustomerHelper());
+		}
+		for (DestinationHelper destinationHelper : list) {
+
+			model.addElement(destinationHelper);
+		}
+
+		txtDestination.setEditable(true);
+	}
 	
 
 }

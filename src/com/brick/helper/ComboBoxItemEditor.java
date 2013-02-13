@@ -74,6 +74,10 @@ public class ComboBoxItemEditor extends BasicComboBoxEditor {
 			LeaderHelper tt = (LeaderHelper) value;
 			setText(tt.name);
 
+		}else if (value instanceof DestinationHelper) {
+			DestinationHelper tt = (DestinationHelper) value;
+			setText(tt.name);
+
 		}
 		
 

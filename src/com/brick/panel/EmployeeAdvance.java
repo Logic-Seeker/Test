@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.brick.database.DatabaseHelper;
+import com.brick.helper.BrickUtils;
 import com.brick.helper.ComboBoxItemEditor;
 import com.brick.helper.ComboBoxItemRenderer;
 import com.brick.helper.EmployeeHelper;
@@ -44,6 +45,7 @@ public class EmployeeAdvance extends JPanel {
 	private DefaultComboBoxModel model;
 	String numToken = "[\\p{Digit}]+";
 	String nepDate=databasehelper.getNEPALIFROMENG(currentDate);
+	String nep_Date=nepDate;
 	private final JLabel lblDate = new JLabel("Date");
 	private final JTextField textDate = new JTextField(nepDate);
 	
@@ -136,6 +138,15 @@ public class EmployeeAdvance extends JPanel {
 				{
 					int id =((EmployeeHelper) comboBoxEmployeeName.getSelectedItem()).id;
 					String amount =textField.getText();
+					
+					nepDate = textDate.getText();
+					if(!BrickUtils.validateFormat(nepDate))
+					{
+						JOptionPane.showMessageDialog(null, "Please check the Date Format", "Failed", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					currentDate = databasehelper.getEngFromNepali(nepDate);
 										
 					if (amount.trim().isEmpty() && !amount.matches(numToken))
 					{
@@ -151,7 +162,8 @@ public class EmployeeAdvance extends JPanel {
 						JOptionPane.showMessageDialog(null,
 								"New entry success", "Success",
 								JOptionPane.INFORMATION_MESSAGE);
-						textDate.setText(nepDate);
+						
+						textDate.setText(nep_Date);
 						textField.setText("");
 					}
 					

@@ -24,6 +24,7 @@ public class MainOrder extends JPanel {
 		
 		tabbedPane.addTab("Order Records\n", null, panel, null);
 		panel.setLayout(new BorderLayout(0, 0));
+		panel.add(new OrderRecords());
 		
 		tabbedPane.addTab("New Order\n", null, panel_1, null);
 		panel_1.setLayout(new BorderLayout(0, 0));
