@@ -7,9 +7,11 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.TextField;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
 
 /**
@@ -19,7 +21,7 @@ import javax.swing.plaf.basic.BasicComboBoxEditor;
  */
 public class ComboBoxItemEditor extends BasicComboBoxEditor {
 	private JPanel panel = new JPanel();
-	private JLabel labelItem = new JLabel();
+	private JTextField labelItem = new JTextField();
 	private String selectedValue;
 	
 	public ComboBoxItemEditor() {
@@ -30,8 +32,10 @@ public class ComboBoxItemEditor extends BasicComboBoxEditor {
 		constraints.insets = new Insets(2, 5, 2, 2);
 		
 		labelItem.setOpaque(false);
+		labelItem.setBorder(null
+				);
 		labelItem.setFont(new Font("Dialog", Font.BOLD, 14));
-		labelItem.setHorizontalAlignment(JLabel.LEFT);
+		//labelItem.setHorizontalAlignment(TextField.LEFT);
 		labelItem.setForeground(Color.BLACK);
 		
 		panel.add(labelItem, constraints);
@@ -77,5 +81,6 @@ public class ComboBoxItemEditor extends BasicComboBoxEditor {
 	}
 	public void setText(String name){
 		labelItem.setText(name);
+		
 	}
 }
